@@ -13,7 +13,7 @@ export default function Home() {
   useEffect(() => {
     if (loadedRef.current) return
     loadedRef.current = true
-    const randomNumber = Math.floor(Math.random() * 10) + 1
+    const randomNumber = Math.floor(Math.random() * 28) + 1
     setRandomNumber(randomNumber)
   }, [])
 

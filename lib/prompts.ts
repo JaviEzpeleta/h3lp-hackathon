@@ -2,7 +2,7 @@ import { askGroq } from "@/lib/groq"
 import { postToDiscord } from "./discord"
 import { askGPT, askGPTNoJSON } from "./openai"
 import { askDeepSeek } from "./deepseek"
-import { ProfileFetchedFromGraphQL } from "./types"
+import { LensSavedProfile, ProfileFetchedFromGraphQL } from "./types"
 
 export const getRandomProduct = async () => {
   const systemPrompt = `
@@ -225,6 +225,70 @@ THANK YOU!
   const response = await askGPT({
     messages,
     useCase: "mergeProfileFacts",
+  })
+
+  return response
+}
+export const mergeTopProductsAndServices = async ({
+  productsAndServices,
+  profile,
+}: {
+  productsAndServices: any[]
+  profile: LensSavedProfile
+}) => {
+  const systemPrompt = `You are an expert at merging a list of products and services from a profile into a single list of products and services. You will be given a list of products and services from a profile and a profile. You will need to merge the products and services into a single list of products and services. Pick the best ones and sort them by relevance (most relevant first).`
+
+  const userPrompt = `
+
+# User Name: ${profile.display_name}
+# User Handle: ${profile.handle.replace("lens/", "")}
+${
+  profile.bio && profile.bio.length > 0
+    ? "# User Description: " + profile.bio
+    : ""
+}
+    # Facts about the user: ${JSON.stringify(profile.facts)}
+
+
+<CompiledFacts>
+${JSON.stringify(productsAndServices)}
+</CompiledFacts>
+
+
+Return a single list of products and services about the user, in JSON format, in the same language as the initial products and services.
+
+The format for the JSON must be:
+{
+  "products_and_services": [
+    {
+      "product_name": "...",
+      "product_description": "...",
+      "product_price": ..., // number
+      "payment_type": "...", // can be "one-time" or "recurring (monthly)"
+      "product_deadline": from 1 to 100 // in days
+      "inspired_by_publication_ids": ["..."] // the publication id(s)
+    }, 
+    ...
+  ]
+}
+
+THANK YOU!
+  `
+
+  const messages = [
+    {
+      role: "system",
+      content: systemPrompt,
+    },
+    {
+      role: "user",
+      content: userPrompt,
+    },
+  ]
+
+  const response = await askGPT({
+    messages,
+    useCase: "mergeProductsAndServicesForIndividualProfile",
   })
 
   return response

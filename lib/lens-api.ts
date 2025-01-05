@@ -1,40 +1,46 @@
 const ENDPOINT = "https://api-v2.lens.dev"
 
 import { profileByHandle } from "@/graphql/profileByHandle"
-import { PROFILE_PAGES_TO_PARSE } from "./constants"
+import {
+  MAX_PUBLICATIONS_WHEN_PARSING_PROFILE,
+  PROFILE_PAGES_TO_PARSE,
+} from "./constants"
 import { profileByAddress } from "@/graphql/profileByAddress"
 import { postErrorToDiscord } from "./discord"
 import { ProfileFetchedFromGraphQL } from "./types"
 import {
+  generateProductsAndServices,
   generateProfileFactsFromPublications,
   mergeProfileFacts,
+  mergeTopProductsAndServices,
 } from "./prompts"
+import { getSavedProfileByHandle } from "./postgres"
+
+// Define the type for publication items
+type Publication = {
+  id: string
+  createdAt: string
+  stats: {
+    reactions: number
+    comments: number
+  }
+  metadata: {
+    id: string
+    content: string
+    asset?: {
+      image: {
+        optimized: {
+          uri: string
+        }
+      }
+    }
+  }
+}
 
 export const getMultiplePublicationsByProfileId = async (
   handle: string,
   pages = PROFILE_PAGES_TO_PARSE
 ) => {
-  // Define the type for publication items
-  type Publication = {
-    id: string
-    createdAt: string
-    stats: {
-      reactions: number
-      comments: number
-    }
-    metadata: {
-      id: string
-      content: string
-      asset?: {
-        image: {
-          optimized: {
-            uri: string
-          }
-        }
-      }
-    }
-  }
-
   const getPaginatedPosts = async (cursor?: string) => {
     const graphqlQuery = {
       query: `
@@ -117,7 +123,7 @@ export const getMultiplePublicationsByProfileId = async (
       return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
     })
 
-    return sortedItems
+    return sortedItems.slice(0, MAX_PUBLICATIONS_WHEN_PARSING_PROFILE)
   } catch (e) {
     console.error("Error fetching multiple publications:", e)
     return []
@@ -208,7 +214,7 @@ export const generateProfileFacts = async (
     return false
   }
 
-  const BLOCKS_OF_POSTS = 3
+  const BLOCKS_OF_POSTS = 20
   console.log(" 🐘  VAMOSSSSSSS")
   console.log(publications.length)
 
@@ -247,10 +253,83 @@ export const generateProfileFacts = async (
   return factsArray
 }
 
-const divideArrayIntoChunks = (array: any[], chunkSize: number) => {
+export const divideArrayIntoChunks = (array: any[], chunkSize: number) => {
   const chunks = []
   for (let i = 0; i < array.length; i += chunkSize) {
     chunks.push(array.slice(i, i + chunkSize))
   }
   return chunks
+}
+
+export const getProductsAndServicesByHandleItself = async (handle: string) => {
+  const profile = await getSavedProfileByHandle(handle)
+  if (!profile) {
+    await postErrorToDiscord(
+      "🔥 🔥 🔥 🔥 🔥  NO profile found for handle " +
+        handle +
+        " in `getProductsAndServicesByHandleItself()`"
+    )
+    return false
+  }
+  const publications = await getMultiplePublicationsByProfileId(profile.id)
+
+  const BATCHES = 40
+
+  const groupedPublications = divideArrayIntoChunks(publications, BATCHES)
+
+  console.log(" 📁  publications:", publications.length)
+  console.log(" 📁  groupedPublications:", groupedPublications.length)
+  // const productsAndServices = await generateProductsAndServices(publications)
+
+  const productsAndServicesFromBlocksOfPublications = await Promise.all(
+    groupedPublications.map(async (block) => {
+      const pAndS = await generateProductsAndServices(block)
+      return pAndS
+    })
+  )
+
+  // console.log(
+  //   " 📁  productsAndServicesFromBlocksOfPublications:",
+  //   productsAndServicesFromBlocksOfPublications
+  // )
+
+  const mergedTopProductsAndServices = await mergeTopProductsAndServices({
+    profile,
+    productsAndServices: productsAndServicesFromBlocksOfPublications,
+  })
+
+  console.log(
+    " 📁  mergedTopProductsAndServices:",
+    mergedTopProductsAndServices
+  )
+
+  if (!mergedTopProductsAndServices) {
+    console.error(
+      "🔴 Error in `getProductsAndServicesByHandleItself() - couldnt merge products and services`"
+    )
+    await postErrorToDiscord(
+      "🔴 Error in `getProductsAndServicesByHandleItself() - couldnt merge products and services`"
+    )
+    return false
+  }
+
+  // now i want to save in the table of ideas h3lp_ideas
+
+  const productsAndServices = JSON.parse(
+    mergedTopProductsAndServices as string
+  ).products_and_services
+
+  await saveProductsAndServicesToIdeasTable({
+    from: handle,
+    to: handle,
+    productsAndServices,
+  })
+
+  // const facts = await mergeProfileFacts({
+  // const facts = await mergeProfileFacts({
+  //   facts: factsFromBlocksOfPublications,
+  //   profile,
+  // })
+
+  return ["pepe"]
 }

@@ -30,3 +30,19 @@ export type LensSavedProfile = {
   bio: string
   facts: string[]
 }
+
+export type GeneratedIdea = {
+  product_name: string
+  product_description: string
+  product_price: number
+  payment_type: string
+  product_deadline: number
+  inspired_by_publication_ids: string[]
+}
+
+export type ProductsAndServiceIdeas = {
+  id: number
+  from_handle: string
+  to_handle: string
+  products_and_services: any[]
+}

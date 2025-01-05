@@ -15,6 +15,12 @@ const MegaIntro = ({ randomNumber }: { randomNumber: number }) => {
   const [lastRender, setLastRender] = useState(0)
   const [isHovering, setIsHovering] = useState(false)
 
+  const [theNumber, setTheNumber] = useState(randomNumber)
+
+  useEffect(() => {
+    setTheNumber(randomNumber)
+  }, [randomNumber])
+
   const stickerURLS = [
     "https://javitoshi.com/smol-stickers/01-star.webp",
     "https://javitoshi.com/smol-stickers/02-red-heart.webp",
@@ -89,8 +95,11 @@ const MegaIntro = ({ randomNumber }: { randomNumber: number }) => {
         className="max-w-xl cursor-pointer w-full !overflow-hidden relative rounded-2xl select-none
       mx-auto h-full flex-1 flex items-center justify-center border-4 shadow-md hover:shadow-lg flex-col
       shadow-black/30 hover:shadow-black/40 transition-all ease-out group"
+        onClick={() => {
+          setTheNumber(Math.floor(Math.random() * 28) + 1)
+        }}
       >
-        {randomNumber ? (
+        {theNumber ? (
           // <div className="slowlyGrowImage inline-block">
           <div className="slowlyGrowImage absolute">
             <img
@@ -98,7 +107,7 @@ const MegaIntro = ({ randomNumber }: { randomNumber: number }) => {
               className="select-none opacity-90 group-hover:opacity-100  group-active:opacity-50
             group-hover:contrast-125 group-hover:brightness-125 transition-all duration-1000 ease-out
             min-w-[500px] scale-[110%] max-w-[650px] group-hover:scale-[115%]"
-              src={`/img/hero/${randomNumber}.webp`}
+              src={`/img/hero/${theNumber}.webp`}
               // src="/img/light-mode-lens.png"
               alt="smol lens logo"
             />

@@ -1,3 +1,5 @@
+export const MAX_PUBLICATIONS_WHEN_PARSING_PROFILE = 300
+
 export const FLASH_LATEST = "gemini-1.5-flash-latest"
 
 export const SEARCH_GOOGLE_NUM_RESULTS = 10

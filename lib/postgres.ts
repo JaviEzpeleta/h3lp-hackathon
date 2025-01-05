@@ -16,6 +16,14 @@ CREATE TABLE h3lp_profiles (
   created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE h3lp_ideas (
+  id SERIAL PRIMARY KEY,
+  from_handle TEXT NOT NULL,
+  to_handle TEXT NOT NULL,
+  products_and_services JSONB NOT NULL,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
 CREATE TABLE h3lp_products (
   id SERIAL PRIMARY KEY,
   name TEXT NOT NULL,
@@ -117,6 +125,10 @@ export const getSavedProfileByAddress = async (address: string) => {
 export const getSavedProfileByHandle = async (
   handle: string
 ): Promise<LensSavedProfile | null> => {
+  if (!handle.startsWith("lens/")) {
+    handle = "lens/" + handle
+  }
+
   const res = await executeQuery(
     `SELECT * FROM h3lp_profiles WHERE handle = $1`,
     [handle]
@@ -214,4 +226,20 @@ export const saveLensProfileObject = async (profile: LensSavedProfile) => {
     )
     return false
   }
+}
+
+export const saveProductsAndServicesToIdeasTable = async ({
+  from,
+  to,
+  productsAndServices,
+}: {
+  from: string
+  to: string
+  productsAndServices: any[]
+}) => {
+  const res = await executeQuery(
+    `INSERT INTO h3lp_ideas (from_handle, to_handle, products_and_services) VALUES ($1, $2, $3)`,
+    [from, to, productsAndServices]
+  )
+  return res.rows
 }
