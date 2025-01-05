@@ -47,15 +47,23 @@ const IdeasList = ({
       </div>
       <div className="space-y-4 py-4">
         {ideas.map((idea: GeneratedIdea, index: number) => (
-          <div key={index} className="p-4 rounded-lg border-[3px] border-black">
-            <SubTitle>{idea.product_name}</SubTitle>
-            <div className="flex items-center gap-2">
-              <PriceTag>
-                ${idea.product_price}
-                {idea.payment_type === "recurring (monthly)" && "/month"}
-              </PriceTag>
+          <div
+            key={index}
+            className="p-4 rounded-lg border-[3px] border-black flex items-center justify-between gap-4"
+          >
+            <div className="w-14 h-14 border-[3px] border-black rounded-md"></div>
+
+            <div className="flex-1">
+              <SubTitle>{idea.product_name}</SubTitle>
+              <div className="flex items-center gap-2">
+                <PriceTag>
+                  ${idea.product_price}
+                  {idea.payment_type === "recurring (monthly)" && "/month"}
+                </PriceTag>
+              </div>
             </div>
-            <div>{idea.product_description}</div>
+            <div>BOX</div>
+            {/* <div>{idea.product_description}</div> */}
           </div>
         ))}
       </div>
