@@ -3,6 +3,7 @@ import Title from "./Title"
 import SubTitle from "./SubTitle"
 import { cleanHandle } from "@/lib/strings"
 import Link from "next/link"
+import PriceTag from "./PriceTag"
 
 const IdeasList = ({
   ideas,
@@ -18,7 +19,7 @@ const IdeasList = ({
   console.log(fromProfile)
   console.log(toProfile)
   return (
-    <div className="flex flex-col w-full max-w-2xl mx-auto">
+    <div className="flex flex-col w-full max-w-2xl mx-auto py-28 px-2">
       <div className="text-center">
         <Title>Products & Service Ideas</Title>
         <Title>
@@ -28,6 +29,7 @@ const IdeasList = ({
               <Link
                 href={`https://hey.xyz/u/${cleanHandle(toProfile.handle)}`}
                 target="_blank"
+                className="active:opacity-50 hover:scale-105 transition-all active:scale-95 translate-y-1"
               >
                 <span
                   className="w-9 rounded-lg h-9 inline-block border-[1.5px] border-black"
@@ -43,10 +45,17 @@ const IdeasList = ({
           </div>
         </Title>
       </div>
-      <div>
+      <div className="space-y-4 py-4">
         {ideas.map((idea: GeneratedIdea, index: number) => (
-          <div key={index} className="p-4 rounded-lg">
-            {idea.product_name}
+          <div key={index} className="p-4 rounded-lg border-[3px] border-black">
+            <SubTitle>{idea.product_name}</SubTitle>
+            <div className="flex items-center gap-2">
+              <PriceTag>
+                ${idea.product_price}
+                {idea.payment_type === "recurring (monthly)" && "/month"}
+              </PriceTag>
+            </div>
+            <div>{idea.product_description}</div>
           </div>
         ))}
       </div>
