@@ -243,3 +243,14 @@ export const saveProductsAndServicesToIdeasTable = async ({
   )
   return res.rows
 }
+
+export const findIdeasByFromHandleToHandle = async (
+  from: string,
+  to: string
+) => {
+  const res = await executeQuery(
+    `SELECT * FROM h3lp_ideas WHERE from_handle = $1 AND to_handle = $2`,
+    [from, to]
+  )
+  return res.rows
+}

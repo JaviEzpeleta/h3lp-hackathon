@@ -9,12 +9,14 @@ import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import LoadingComponent from "../../components/LoadingComponent"
 import { AnimatePresence, motion } from "framer-motion"
+import { useToast } from "@/hooks/use-toast"
 
 const HomePage = () => {
   const { userSession, isFetchingSession } = useStore()
   const [handle, setHandle] = useState("")
   const [isSearching, setIsSearching] = useState(false)
 
+  const { toast } = useToast()
   const router = useRouter()
 
   useEffect(() => {
@@ -33,8 +35,17 @@ const HomePage = () => {
       handle,
       fromHandle: userSession.handle,
     })
+    if (res.data.success) {
+      const cleanHandle = res.data.data.handle.replace("lens/", "")
+      const cleanFromHandle = res.data.data.fromHandle.replace("lens/", "")
+      router.push(`/ideas/${cleanHandle}/${cleanFromHandle}`)
+    } else {
+      toast({
+        title: "Oooooops!!! No ideas found...",
+        description: "Try again with a different handle, sorry!",
+      })
+    }
 
-    console.log(res)
     setIsSearching(false)
   }
 

@@ -1,6 +1,9 @@
 import { postErrorToDiscord } from "@/lib/discord"
 import { getProductsAndServicesByHandleItself } from "@/lib/lens-api"
-import { getSavedProfileByHandle } from "@/lib/postgres"
+import {
+  findIdeasByFromHandleToHandle,
+  getSavedProfileByHandle,
+} from "@/lib/postgres"
 import { NextResponse } from "next/server"
 
 export async function POST(request: Request) {
@@ -33,11 +36,19 @@ export async function POST(request: Request) {
     if (handle === fromHandle) {
       console.log(" 🔥 🔥 🔥 🔥 🔥  handle === fromHandle SON IGUALES")
 
-      const productsAndServices = await getProductsAndServicesByHandleItself(
-        handle
-      )
+      const findSavedIdeas = await findIdeasByFromHandleToHandle(handle, handle)
 
-      return NextResponse.json({ success: true, data: { productsAndServices } })
+      if (findSavedIdeas && findSavedIdeas.length > 0) {
+        console.log(" 🔥 🔥 🔥 🔥 🔥  FOUND SavedIdeas yay!!!", findSavedIdeas)
+        return NextResponse.json({
+          success: true,
+          data: { handle, fromHandle },
+        })
+      } else {
+        await getProductsAndServicesByHandleItself(handle)
+      }
+
+      return NextResponse.json({ success: true, data: { handle, fromHandle } })
     } else {
       console.log(" 🔥 🔥 🔥 🔥 🔥  handle !== fromHandle SON DIFERENTES")
 
