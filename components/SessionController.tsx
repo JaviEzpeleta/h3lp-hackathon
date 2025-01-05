@@ -17,16 +17,18 @@ export function SessionController() {
       })
       const profile = res.data.data
 
-      console.log("🟢 profile:", profile)
-
       setUserSession(profile)
       setIsFetchingSession(false)
     }
+
     if (address) {
       if (!loadedRef.current) {
         loadedRef.current = true
         fetchUserName()
       }
+    } else {
+      console.log("🟢 updating isFetchingSession to false")
+      setIsFetchingSession(false)
     }
   }, [address])
   return null

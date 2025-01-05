@@ -1,7 +1,5 @@
 "use client"
 
-import { Button } from "@/components/ui/button"
-import Link from "next/link"
 import MegaIntro from "@/components/MegaIntro"
 import SignInOrNot from "@/components/SignInOrNot"
 import { useEffect } from "react"
@@ -9,17 +7,15 @@ import { useRef } from "react"
 import { useState } from "react"
 
 export default function Home() {
-  const [randomNumber, setRandomNumber] = useState(0) // Default value
+  const [randomNumber, setRandomNumber] = useState(0)
 
   const loadedRef = useRef(false)
   useEffect(() => {
     if (loadedRef.current) return
     loadedRef.current = true
     const randomNumber = Math.floor(Math.random() * 10) + 1
-    console.log("SETTING RANDOM NUMBEEERRR")
-
     setRandomNumber(randomNumber)
-  }, []) // Run once on client-side mount
+  }, [])
 
   return (
     <div className="">

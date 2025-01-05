@@ -87,12 +87,12 @@ const MegaIntro = ({ randomNumber }: { randomNumber: number }) => {
     >
       <div
         className="max-w-xl cursor-pointer w-full !overflow-hidden relative rounded-2xl select-none
-      mx-auto h-full flex-1 flex items-center justify-center border-4 shadow-md hover:shadow-lg 
+      mx-auto h-full flex-1 flex items-center justify-center border-4 shadow-md hover:shadow-lg flex-col
       shadow-black/30 hover:shadow-black/40 transition-all ease-out group"
       >
         {randomNumber ? (
           // <div className="slowlyGrowImage inline-block">
-          <div className="slowlyGrowImage absolute border-4 border-red-400">
+          <div className="slowlyGrowImage absolute">
             <img
               draggable={false}
               className="select-none opacity-90 group-hover:opacity-100  group-active:opacity-50
@@ -124,33 +124,6 @@ const MegaIntro = ({ randomNumber }: { randomNumber: number }) => {
         {/* <LensDecorations /> */}
 
         <div className="flex select-none items-center gap-4 text-11xl font-black z-10 text-shadow-like-border2">
-          {/* <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            // srping animation :
-            transition={{
-              type: "spring",
-              stiffness: 200,
-              damping: 10,
-              // delay: 0.2,
-            }}
-            className="text-emerald-100 relative"
-          >
-            <div>Lens</div>
-          </motion.div>
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{
-              type: "spring",
-              stiffness: 200,
-              damping: 10,
-              delay: 0.2,
-            }}
-            className="text-blue-100"
-          >
-            <div>Fair</div>
-          </motion.div> */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -165,6 +138,19 @@ const MegaIntro = ({ randomNumber }: { randomNumber: number }) => {
             <div className="select-none">H3lp</div>
           </motion.div>
         </div>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{
+            duration: 1.2,
+            delay: 2,
+          }}
+          className="text-white select-none z-10"
+        >
+          <div className="select-none font-bold w-full translate-y-6 text-xl md:text-2xl text-shadow-like-border12">
+            Helping you help others who can help you
+          </div>
+        </motion.div>
       </div>
     </div>
   )

@@ -133,14 +133,14 @@ body {
 .slowlyGrowImage {
   filter: blur(0px);
   transform: scale(1.1) rotate(-12deg);
-  animation: slowlyGrowImage 3.4s ease-out;
+  animation: slowlyGrowImage 2.4s ease-out;
   transform-origin: center;
 }
 
 @keyframes slowlyGrowImage {
   from {
     transform: scale(0.8) rotate(12deg);
-    filter: blur(22.2px);
+    filter: blur(6px);
   }
   to {
     transform: scale(1.1) rotate(-12deg);

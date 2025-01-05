@@ -5,15 +5,25 @@ import Title from "@/components/Title"
 import { Input } from "@/components/ui/input"
 import useStore from "@/lib/zustandStore"
 import axios from "axios"
+import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
+import LoadingComponent from "../../components/LoadingComponent"
 
 const HomePage = () => {
-  const { userSession } = useStore()
+  const { userSession, isFetchingSession } = useStore()
   const [handle, setHandle] = useState("")
 
+  const router = useRouter()
+
   useEffect(() => {
-    setHandle(userSession?.handle.replace("lens/", "") || "")
-  }, [userSession])
+    if (!isFetchingSession && !userSession) {
+      router.push("/")
+    } else if (!isFetchingSession && userSession) {
+      setHandle(userSession?.handle.replace("lens/", "") || "")
+    }
+    console.log("isFetchingSession", isFetchingSession)
+    console.log("userSession", userSession)
+  }, [userSession, isFetchingSession])
 
   const submitForm = async () => {
     if (!userSession) return
@@ -23,6 +33,14 @@ const HomePage = () => {
     })
 
     console.log(res)
+  }
+
+  if (isFetchingSession) {
+    return (
+      <div>
+        <LoadingComponent />
+      </div>
+    )
   }
 
   return (
