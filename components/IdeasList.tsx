@@ -7,6 +7,8 @@ import Link from "next/link"
 import PriceTag from "./PriceTag"
 import MegaTitle from "./MegaTitle"
 import BigTitle from "./BigTitle"
+import NewProductModal from "./NewProductModal"
+import { useState } from "react"
 
 const IdeasList = ({
   ideas,
@@ -17,13 +19,23 @@ const IdeasList = ({
   fromProfile: any
   toProfile: any
 }) => {
-  console.log("ideas")
-  console.log(ideas)
-  console.log(fromProfile)
-  console.log(toProfile)
+  const [selectedIdea, setSelectedIdea] = useState<GeneratedIdea | null>(null)
+  const prefillForm = (idea: GeneratedIdea) => {
+    setSelectedIdea(idea)
+  }
+
   return (
     <div className="flex flex-col w-full max-w-2xl mx-auto py-28 px-2">
+      <NewProductModal
+        idea={selectedIdea}
+        onClose={() => {
+          setSelectedIdea(null)
+        }}
+        onSave={() => {}}
+        modalOn={selectedIdea !== null}
+      />
       <div className="text-center">
+        <BigTitle>Products & Service</BigTitle>
         <BigTitle>Products & Service</BigTitle>
         <BigTitle>
           <div className="text-indigo-700">(Ideas)</div>
@@ -58,7 +70,7 @@ const IdeasList = ({
             className="p-4 relative rounded-lg border-[3px] border-black flex items-center justify-between gap-4"
           >
             <div className="w-14 h-14 border-[3px] border-black rounded-md">
-              <AnimatedStar />
+              <AnimatedStar onClick={() => prefillForm(idea)} />
             </div>
 
             <div className="flex-1 pr-16">

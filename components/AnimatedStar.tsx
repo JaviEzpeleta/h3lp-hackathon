@@ -3,13 +3,14 @@
 import { useState } from "react"
 import { AnimatePresence, motion } from "framer-motion"
 
-const AnimatedStar = () => {
+const AnimatedStar = ({ onClick }: { onClick: () => void }) => {
   const [isHovering, setIsHovering] = useState(false)
   return (
     <div
       className="w-full h-full border bg-yellow-100 flex items-center justify-center cursor-pointer active:scale-[88%] transition-all duration-100 active:opacity-60"
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
+      onClick={onClick}
     >
       <AnimatePresence>
         {isHovering && (
