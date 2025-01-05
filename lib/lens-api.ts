@@ -14,7 +14,10 @@ import {
   mergeProfileFacts,
   mergeTopProductsAndServices,
 } from "./prompts"
-import { getSavedProfileByHandle } from "./postgres"
+import {
+  getSavedProfileByHandle,
+  saveProductsAndServicesToIdeasTable,
+} from "./postgres"
 
 // Define the type for publication items
 type Publication = {

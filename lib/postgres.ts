@@ -17,11 +17,11 @@ CREATE TABLE h3lp_profiles (
 );
 
 CREATE TABLE h3lp_ideas (
-  id SERIAL PRIMARY KEY,
-  from_handle TEXT NOT NULL,
-  to_handle TEXT NOT NULL,
-  products_and_services JSONB NOT NULL,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+    id SERIAL PRIMARY KEY,
+    from_handle TEXT NOT NULL,
+    to_handle TEXT NOT NULL,
+    products_and_services TEXT NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE h3lp_products (
@@ -239,7 +239,7 @@ export const saveProductsAndServicesToIdeasTable = async ({
 }) => {
   const res = await executeQuery(
     `INSERT INTO h3lp_ideas (from_handle, to_handle, products_and_services) VALUES ($1, $2, $3)`,
-    [from, to, productsAndServices]
+    [from, to, JSON.stringify(productsAndServices)]
   )
   return res.rows
 }

@@ -105,7 +105,7 @@ const MegaIntro = ({ randomNumber }: { randomNumber: number }) => {
             <img
               draggable={false}
               className="select-none opacity-90 group-hover:opacity-100  group-active:opacity-50
-            group-hover:contrast-125 group-hover:brightness-125 transition-all duration-1000 ease-out
+            group-hover:contrast-[110%] group-hover:brightness-[110%] transition-all duration-1000 ease-out
             min-w-[500px] scale-[110%] max-w-[650px] group-hover:scale-[115%]"
               src={`/img/hero/${theNumber}.webp`}
               // src="/img/light-mode-lens.png"
