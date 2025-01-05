@@ -2,20 +2,148 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+body {
+  font-family: Arial, Helvetica, sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --radius: 0.5rem;
+  }
+}
+@media (min-width: 700px) {
+  .topBarStuff {
+    background-color: transparent;
+    background-image: radial-gradient(transparent 2px, #ffffffee 2px);
+    background-size: 6px 6px;
+    background-position: center;
+    backdrop-filter: blur(3px);
+    mask: linear-gradient(rgb(0, 0, 0) 60%, rgba(0, 0, 0, 0) 100%);
+    opacity: 1;
+    transition: all 0.92s ease-in-out;
   }
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+/* .topBarStuff:hover {
+  background-image: radial-gradient(transparent 2px, #ffffff99 2px);
+} */
+/* .topBarStuff:hover { */
+/* scale: 3.02; */
+/* background-size: 5.2px 5.2px; */
+/* background-image: radial-gradient(transparent 1.3px, #0a0a0a 1.3px); */
+/* } */
+
+@media (min-width: 700px) {
+  .animateToTheLeft {
+    animation: animateToTheLeft 280s linear infinite;
+  }
+}
+
+@keyframes animateToTheLeft {
+  from {
+    transform: translateX(50%);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.hello {
+  border: 1px solid red;
+}
+
+@font-face {
+  font-family: "HeyComic";
+  src: url("/fonts/HeyComic.ttf") format("ttf");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "VCR OSD Mono";
+  src: url("/fonts/vcr_osd_mono_1.001-webfont.woff2") format("woff2"),
+    url("/fonts/vcr_osd_mono_1.001-webfont.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "MuseoSans";
+  src: url("/fonts/MuseoSansRounded100.woff") format("woff");
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "MuseoSans";
+  src: url("/fonts/MuseoSansRounded1000.woff") format("woff");
+  font-weight: 1000;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "MuseoSans";
+  src: url("/fonts/MuseoSansRounded900.woff") format("woff");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "MuseoSans";
+  src: url("/fonts/MuseoSansRounded700.woff") format("woff");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "MuseoSans";
+  src: url("/fonts/MuseoSansRounded500.woff") format("woff");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "MuseoSans";
+  src: url("/fonts/MuseoSansRounded300.woff") format("woff");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+.flexible {
+  field-sizing: content;
+  resize: none;
+}
+
+.text-shadow-like-border12 {
+  text-shadow: 1.2px 0 0 rgba(0, 0, 0, 0.5), -1.2px 0 0 rgba(0, 0, 0, 0.5),
+    0 1.2px 0 rgba(0, 0, 0, 0.5), 0 -1.2px 0 rgba(0, 0, 0, 0.5),
+    1.2px 1.2px rgba(0, 0, 0, 0.5), -1.2px -1.2px 0 rgba(0, 0, 0, 0.5),
+    1.2px -1.2px 0 rgba(0, 0, 0, 0.5), -1.2px 1.2px 0 rgba(0, 0, 0, 0.5);
+}
+
+.text-shadow-like-border2 {
+  text-shadow: 2px 0 0 rgba(0, 0, 0, 0.5), -2px 0 0 rgba(0, 0, 0, 0.5),
+    0 2px 0 rgba(0, 0, 0, 0.5), 0 -2px 0 rgba(0, 0, 0, 0.5),
+    2px 2px rgba(0, 0, 0, 0.5), -2px -2px 0 rgba(0, 0, 0, 0.5),
+    2px -2px 0 rgba(0, 0, 0, 0.5), -2px 2px 0 rgba(0, 0, 0, 0.5);
+}
+
+.slowlyGrowImage {
+  filter: blur(0px);
+  transform: scale(1.1) rotate(-12deg);
+  animation: slowlyGrowImage 3.4s ease-out;
+  transform-origin: center;
+}
+
+@keyframes slowlyGrowImage {
+  from {
+    transform: scale(0.8) rotate(12deg);
+    filter: blur(22.2px);
+  }
+  to {
+    transform: scale(1.1) rotate(-12deg);
+    filter: blur(0px);
+  }
 }

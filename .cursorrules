@@ -1,0 +1,5 @@
+que sea como "gumroad" donde se pueden lkistar productos, cada producto tiene un
+id, un precio, y un plazo de entrega o escrow. el smart contract se queda el
+dinero hasta que: o confirma el cliente que todo está bien, o se cumple el plazo
+y va el dinero al creador, o hay una disputa y determinados admins pueden
+decidir mandar el dinero a uno u a otro o dividirlo a partes específicas.
