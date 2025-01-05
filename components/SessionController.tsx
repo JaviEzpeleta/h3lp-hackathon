@@ -7,7 +7,7 @@ import useStore from "@/lib/zustandStore"
 
 export function SessionController() {
   const loadedRef = useRef(false)
-  const { address } = useAccount()
+  const { address, isConnecting } = useAccount()
   const { setUserSession, setIsFetchingSession } = useStore()
 
   useEffect(() => {
@@ -21,15 +21,17 @@ export function SessionController() {
       setIsFetchingSession(false)
     }
 
-    if (address) {
-      if (!loadedRef.current) {
-        loadedRef.current = true
-        fetchUserName()
+    if (!isConnecting) {
+      if (address) {
+        if (!loadedRef.current) {
+          loadedRef.current = true
+          fetchUserName()
+        }
+      } else {
+        console.log("🟢 updating isFetchingSession to false")
+        setIsFetchingSession(false)
       }
-    } else {
-      console.log("🟢 updating isFetchingSession to false")
-      setIsFetchingSession(false)
     }
-  }, [address])
+  }, [address, isConnecting])
   return null
 }
