@@ -5,13 +5,11 @@ import { postErrorToDiscord } from "@/lib/discord"
 export async function POST(request: Request) {
   try {
     const { address } = await request.json()
-    console.log("🐔  Got address:", address)
 
     const savedProfile = await getSavedProfileByAddress(address)
     if (!savedProfile) {
       await postErrorToDiscord("No saved profile found for address: " + address)
     }
-    console.log("🟢 savedProfile:", savedProfile)
 
     return NextResponse.json({ success: true, data: savedProfile })
   } catch (error) {
