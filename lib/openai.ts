@@ -17,7 +17,7 @@ const openai = new OpenAI({
 export const askGPT = async ({
   messages,
   temperature = 0.33,
-  model = GPT4oMini,
+  model = GPT4o,
   useCase,
 }: {
   useCase: string
