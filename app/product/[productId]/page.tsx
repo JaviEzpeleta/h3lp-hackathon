@@ -40,7 +40,7 @@ const ProductPage = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       setLoading(true)
-      const res = await axios.post("/api/product/get", { productId })
+      const res = await axios.post("/api/products/get", { productId })
       setProduct(res.data.data)
       setLoading(false)
     }
