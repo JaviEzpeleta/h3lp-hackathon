@@ -7,7 +7,9 @@ import Title from "./Title"
 const PuchaseConfirmationComponent = () => {
   return (
     <div>
-      <FireworksComponent />
+      <div className="pointer-events-none">
+        <FireworksComponent />
+      </div>
       <BlurryEntrance delay={0.12}>
         <div className="px-4 w-full flex justify-center py-6 bg-rfGreen/30 rounded-2xl">
           <div className="flex flex-col items-center gap-4">

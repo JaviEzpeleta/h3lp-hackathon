@@ -325,3 +325,38 @@ export const saveProductPurchase = async ({
     return false
   }
 }
+
+export const getPurchasesByAddress = async (address: string) => {
+  const theSQL = `
+    SELECT 
+      hp.*, 
+      p.name AS product_name, 
+      h.handle AS creator_handle,
+      h.display_name AS creator_display_name,
+      h.profile_picture AS creator_profile_picture
+    FROM h3lp_purchases hp
+    JOIN h3lp_products p ON hp.product_id = p.id
+    JOIN h3lp_profiles h ON p.created_by = h.address
+    WHERE hp.address = $1
+    ORDER BY hp.created_at DESC
+  `
+  const res = await executeQuery(theSQL, [address])
+  return res.rows
+}
+
+export const getSalesByAddress = async (address: string) => {
+  const theSQL = `
+    SELECT 
+      hp.*, 
+      p.name AS product_name, 
+      h.handle AS creator_handle,
+      h.display_name AS creator_display_name,
+      h.profile_picture AS creator_profile_picture
+    FROM h3lp_purchases hp
+    JOIN h3lp_products p ON hp.product_id = p.id
+    JOIN h3lp_profiles h ON p.created_by = h.address
+    WHERE p.created_by = $1
+  `
+  const res = await executeQuery(theSQL, [address])
+  return res.rows
+}

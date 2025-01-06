@@ -212,18 +212,16 @@ const ProductPage = () => {
       )}
 
       {hash && (
-        <Alert>
-          <AlertDescription className="font-mono break-all">
-            Tx:{" "}
-            <Link
-              href={`${BLOCK_EXPLORER_URL}/tx/${hash}`}
-              target="_blank"
-              className="text-ttRed hover:underline active:opacity-50"
-            >
-              {hash}
-            </Link>
-          </AlertDescription>
-        </Alert>
+        <div>
+          Tx:{" "}
+          <Link
+            href={`${BLOCK_EXPLORER_URL}/tx/${hash}`}
+            target="_blank"
+            className="text-ttRed hover:underline active:opacity-50"
+          >
+            {hash}
+          </Link>
+        </div>
       )}
 
       {isConfirmed && <PuchaseConfirmationComponent />}

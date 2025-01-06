@@ -2,15 +2,22 @@
 
 import LoadingIndicator from "@/components/LoadingIndicator"
 import { useRouter } from "next/navigation"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import useStore from "@/lib/zustandStore"
 import { cleanHandle } from "../../lib/strings"
 import BigTitle from "@/components/BigTitle"
 import Title from "@/components/Title"
+import axios from "axios"
+import MiniTitle from "@/components/MiniTitle"
+import LoadingComponent from "@/components/LoadingComponent"
 
 const ProfilePage = () => {
   const router = useRouter()
   const { userSession, isFetchingSession } = useStore()
+
+  const [sales, setSales] = useState([])
+  const [purchases, setPurchases] = useState([])
+  const [isFetching, setIsFetching] = useState(true)
 
   useEffect(() => {
     if (!isFetchingSession && !userSession) {
@@ -18,8 +25,32 @@ const ProfilePage = () => {
     }
   }, [userSession, isFetchingSession])
 
-  if (isFetchingSession) {
-    return <LoadingIndicator />
+  useEffect(() => {
+    const fetchSalesAndPurchases = async () => {
+      if (!userSession) return
+      const res = await axios.post("/api/get-sales-and-purchases", {
+        handle: userSession.handle,
+      })
+      console.log(res.data)
+      setSales(res.data.data.sales)
+      setPurchases(res.data.data.purchases)
+      setIsFetching(false)
+    }
+    if (userSession) {
+      console.log("gonna fech sales and purchases! LFG 🚀")
+
+      fetchSalesAndPurchases()
+      // setHandle(userSession?.handle.replace("lens/", "") || "")
+    }
+  }, [userSession])
+
+  if (isFetchingSession || isFetching) {
+    return (
+      <div className="max-w-5xl mx-auto px-2 py-60 space-y-4 w-full flex flex-col items-center justify-center">
+        <LoadingIndicator />
+        <LoadingComponent />
+      </div>
+    )
   }
   if (!userSession) {
     return (
@@ -46,8 +77,62 @@ const ProfilePage = () => {
           </Title>
         </div>
       </div>
+      <div className="bg-zinc-100 rounded-2xl p-4 px-6">
+        <Title>Sales</Title>
+        <div className="flex flex-col gap-2 py-2">
+          {sales.map((sale: Purchase, index) => (
+            <div
+              key={index}
+              className="border p-3 rounded-lg shadow-sm shadow-black/10 px-5"
+            >
+              <MiniTitle>{sale.product_name}</MiniTitle>
+              <div className="flex items-center gap-2">
+                <div
+                  className="w-10 h-10 rounded-full bg-zinc-200 border-2 border-black/40"
+                  style={{
+                    backgroundImage: `url(${sale.creator_profile_picture})`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                  }}
+                ></div>
+                <div>
+                  <div className="font-bold">{sale.creator_display_name}</div>
+                  <div className="text-xs">
+                    @{cleanHandle(sale.creator_handle)}
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className="bg-zinc-100 rounded-2xl p-4">
+        <Title>Purchases</Title>
+        <div className="flex flex-col gap-2">
+          {purchases.map((purchase: Purchase, index) => (
+            <div key={index}>
+              <MiniTitle>{purchase.product_name}</MiniTitle>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   )
 }
 
 export default ProfilePage
+
+type Purchase = {
+  address: string
+  amount: string
+  created_at: string
+  creator_handle: string
+  id: string
+  product_id: string
+  product_name: string
+  purchase_tx_hash: string
+  status: string
+  updated_at: string
+  creator_display_name: string
+  creator_profile_picture: string
+}

@@ -8,7 +8,7 @@ const Footer = () => {
         <Link
           href="https://hey.xyz/u/0xjavi"
           target="_blank"
-          className="text-ttRed cursor-pointer active:opacity-40"
+          className="text-ttRed cursor-pointer active:opacity-40 hover:underline"
         >
           0xjavi
         </Link>{" "}
