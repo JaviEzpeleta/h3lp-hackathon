@@ -1,8 +1,8 @@
 "use client"
 
 import SubTitle from "@/components/SubTitle"
+import RecentProducts from "@/components/RecentProducts"
 import Title from "@/components/Title"
-import { Input } from "@/components/ui/input"
 import useStore from "@/lib/zustandStore"
 import axios from "axios"
 import { useRouter } from "next/navigation"
@@ -103,6 +103,9 @@ const HomePage = () => {
             </motion.div>
           )}
         </AnimatePresence>
+      </div>
+      <div className="max-w-3xl px-2 py-24 mx-auto">
+        <RecentProducts />
       </div>
     </div>
   )

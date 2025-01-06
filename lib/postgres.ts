@@ -273,3 +273,19 @@ export const findIdeasByFromHandleToHandle = async (
   )
   return res.rows
 }
+
+export const getRecentProducts = async () => {
+  const res = await executeQuery(
+    `SELECT * FROM h3lp_products ORDER BY created_at DESC LIMIT 10`
+  )
+
+  const rows = res.rows
+
+  if (rows.length === 0) return []
+
+  for (const row of rows) {
+    row.creator = await getLensProfileByAddress(row.created_by)
+  }
+
+  return rows
+}

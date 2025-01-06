@@ -46,3 +46,26 @@ export type ProductsAndServiceIdeas = {
   to_handle: string
   products_and_services: any[]
 }
+
+export type ProductInList = {
+  created_at: string
+  created_by: string
+  creator: {
+    id: string
+    address: string
+    handle: string
+    display_name: string
+    profile_picture: string
+  }
+  deadline: number
+  description: string
+  id: number
+  inspired_by_publication_ids: string[]
+  name: string
+  offered_by: string
+  price: string
+  targeted_to: string
+  tx_hash: string
+  updated_at: string
+  payment_type: string
+}
