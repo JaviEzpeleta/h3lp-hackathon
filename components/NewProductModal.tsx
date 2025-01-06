@@ -6,42 +6,74 @@ import { Label } from "./ui/label"
 import { useEffect, useState } from "react"
 import { Textarea } from "./ui/textarea"
 import { Button } from "./ui/button"
-import { GeneratedIdea } from "@/lib/types"
+import { GeneratedIdea, LensSavedProfile } from "@/lib/types"
 import Title from "./Title"
 import MiniTitle from "./MiniTitle"
 import { RadioGroup, RadioGroupItem } from "./ui/radio-group"
+import useStore from "@/lib/zustandStore"
+import { useToast } from "@/hooks/use-toast"
+import axios from "axios"
 
 const NewProductModal = ({
   idea,
   onClose,
   onSave,
   modalOn,
+  fromProfile,
+  toProfile,
 }: {
   idea: GeneratedIdea | null
   onClose: () => void
   onSave: (fullDescription: string) => void
   modalOn: boolean
+  fromProfile: LensSavedProfile
+  toProfile: LensSavedProfile
 }) => {
   const [description, setDescription] = useState("")
   const [title, setTitle] = useState("")
   const [price, setPrice] = useState<number>(0)
 
-  const saveClicked = () => {
-    console.log(" VAMOS A GUARDAARRRRRR!!!!!")
-  }
+  const { userSession } = useStore()
 
-  // useEffect(() => {
-  //   const descriptionParts = doc.description
-  //     .split(":::")
-  //     .map((part) => part.trim()) as [string, string]
-  //   setTitle(descriptionParts[0])
-  //   setDescription(descriptionParts[1])
-  // }, [doc])
+  const { toast } = useToast()
+
+  const saveClicked = async () => {
+    if (!idea) return
+    if (!userSession) return
+
+    if (price <= 0) {
+      toast({
+        title: "Oops, the price!",
+        description: "Please put a price greater than $0",
+        variant: "destructive",
+      })
+      return false
+    }
+
+    const product = {
+      name: title,
+      description: description,
+      price: price,
+      deadline: idea.product_deadline,
+      created_by: userSession.address,
+      inspired_by_publication_ids: idea.inspired_by_publication_ids,
+      offered_by: fromProfile.handle,
+      targeted_to: toProfile.handle,
+    }
+
+    console.log(" 📁  product")
+    console.log(product)
+    // console.log(" 📁  idea")
+    // console.log(idea)
+
+    const response = await axios.post("/api/create-product", product)
+  }
 
   useEffect(() => {
     if (idea) {
       setTitle(idea.product_name)
       setDescription(idea.product_description)
+      setPrice(idea.product_price)
     }
   }, [idea])
 
@@ -92,7 +124,7 @@ const NewProductModal = ({
                 value={price}
                 min={0}
                 step={0.01}
-                className="!text-base font-semibold w-28"
+                className="!text-base font-semibold w-32"
                 onChange={(e) => setPrice(Number(e.target.value))}
               />
               <div className="text-sm font-semibold">$GRASS</div>
@@ -104,7 +136,7 @@ const NewProductModal = ({
                 <RadioGroupItem value="option-one" id="option-one" />
                 <Label
                   htmlFor="option-one"
-                  className="text-lg font-semibold cursor-pointer"
+                  className="text-base font-semibold cursor-pointer"
                 >
                   One-time
                 </Label>
@@ -113,7 +145,7 @@ const NewProductModal = ({
                 <RadioGroupItem value="option-two" id="option-two" />
                 <Label
                   htmlFor="option-two"
-                  className="text-lg font-semibold cursor-pointer"
+                  className="text-base font-semibold cursor-pointer"
                 >
                   Recurring (Monthly)
                 </Label>
@@ -122,8 +154,8 @@ const NewProductModal = ({
           </div>
         </div>
 
-        <Button onClick={saveClicked} className="rounded-full">
-          Create this product
+        <Button onClick={saveClicked} className="rounded-full" size="xl">
+          Create this product!
         </Button>
       </DialogContent>
     </Dialog>

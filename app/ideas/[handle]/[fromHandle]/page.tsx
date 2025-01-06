@@ -6,7 +6,7 @@ import SubTitle from "@/components/SubTitle"
 import IdeasList from "@/components/IdeasList"
 import axios from "axios"
 import Link from "next/link"
-import { useParams, usePathname } from "next/navigation"
+import { useParams } from "next/navigation"
 import { useEffect, useRef, useState } from "react"
 
 const IdeasPage = () => {
@@ -53,7 +53,11 @@ const IdeasPage = () => {
 
   return (
     <div className="flex flex-col items-center justify-center">
-      {isSearching && <LoadingComponent />}
+      {isSearching && (
+        <div className="py-48">
+          <LoadingComponent />
+        </div>
+      )}
       {!isSearching && ideas.length > 0 && (
         <IdeasList
           ideas={ideas}

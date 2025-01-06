@@ -79,8 +79,6 @@ const UploadProductFileModule = () => {
         return
       }
 
-      console.log("paso 2.3")
-
       const product = {
         name,
         description,

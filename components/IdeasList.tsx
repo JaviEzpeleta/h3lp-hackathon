@@ -9,6 +9,7 @@ import MegaTitle from "./MegaTitle"
 import BigTitle from "./BigTitle"
 import NewProductModal from "./NewProductModal"
 import { useState } from "react"
+import ToolTipped from "./ToolTipped"
 
 const IdeasList = ({
   ideas,
@@ -28,6 +29,8 @@ const IdeasList = ({
     <div className="flex flex-col w-full max-w-2xl mx-auto py-28 px-2">
       <NewProductModal
         idea={selectedIdea}
+        fromProfile={fromProfile}
+        toProfile={toProfile}
         onClose={() => {
           setSelectedIdea(null)
         }}
@@ -37,9 +40,11 @@ const IdeasList = ({
       <div className="text-center">
         <BigTitle>Products & Services</BigTitle>
         <BigTitle>
-          <div className="text-indigo-800">
-            (Ideas<span className="text-ttRed">*</span>)
-          </div>
+          <ToolTipped text="These are just ideas... Use any of them as a starting point for creating actual products!">
+            <div className="text-indigo-800">
+              (Ideas<span className="text-ttRed">*</span>)
+            </div>
+          </ToolTipped>
         </BigTitle>
         <Title>
           <div className="inline-flex items-center gap-2 pt-1">

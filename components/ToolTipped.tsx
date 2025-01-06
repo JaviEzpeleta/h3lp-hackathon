@@ -35,8 +35,13 @@ const ToolTipped = ({
           {children}
           {/* <Button variant="outline">Hover</Button> */}
         </TooltipTrigger>
-        <TooltipContent className="bg-zinc-600" side={side}>
-          <p className="text-base font-museo">{textMap[text] || text}</p>
+        <TooltipContent
+          className="bg-white/40 backdrop-blur-md border-2 border-black/30"
+          side={side}
+        >
+          <p className="text-lg max-w-xs text-black/90 px-2 font-shantellSans font-semibold">
+            {textMap[text] || text}
+          </p>
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>

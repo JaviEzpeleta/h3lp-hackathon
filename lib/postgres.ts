@@ -30,9 +30,13 @@ CREATE TABLE h3lp_products (
   description TEXT NOT NULL,
   price TEXT NOT NULL,
   deadline INTEGER NOT NULL,
-  address TEXT NOT NULL,
+  created_by TEXT NOT NULL,
+  inspired_by_publication_ids TEXT[] NOT NULL,
+  offered_by TEXT NOT NULL,
+  targeted_to TEXT NOT NULL,
   tx_hash TEXT,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE h3lp_purchases (
@@ -141,20 +145,35 @@ export const createProduct = async ({
   description,
   price,
   deadline,
-  address,
+  created_by,
+  inspired_by_publication_ids,
+  offered_by,
+  targeted_to,
 }: {
   name: string
   description: string
   price: string
   deadline: number
-  address: string
+  created_by: string
+  inspired_by_publication_ids: string[]
+  offered_by: string
+  targeted_to: string
 }) => {
   try {
     const res = await executeQuery(
-      `INSERT INTO h3lp_products (name, description, price, deadline, address) 
-       VALUES ($1, $2, $3, $4, $5) 
+      `INSERT INTO h3lp_products (name, description, price, deadline, created_by, inspired_by_publication_ids, offered_by, targeted_to) 
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8) 
        RETURNING id`,
-      [name, description, price, deadline, address]
+      [
+        name,
+        description,
+        price,
+        deadline,
+        created_by,
+        inspired_by_publication_ids,
+        offered_by,
+        targeted_to,
+      ]
     )
     return res.rows[0].id
   } catch (error) {

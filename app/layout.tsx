@@ -54,9 +54,8 @@ export default function RootLayout({
             <NoiseLayer />
             <Grid />
             <div className="min-h-[100svh] flex flex-col justify-between selection:bg-black/60 selection:text-rfGreen">
-              <Toaster />
-
               <div>{children}</div>
+              <Toaster />
               <Footer />
             </div>
           </Web3Provider>
