@@ -74,17 +74,17 @@ const NewProductModal = ({
     // console.log(" 📁  idea")
     // console.log(idea)
 
-    return false
-    // const response = await axios.post("/api/create-product", product)
+    // return false
+    const response = await axios.post("/api/create-product", product)
     // console.log(" 📁  response")
     // console.log(response)
     // console.log(" 📁  response.data")
     // console.log(response.data)
 
-    // const productId = response.data.data
+    const productId = response.data.data
 
-    // setProductCreated(productId)
-    // setIsCreating(false)
+    setProductCreated(productId)
+    setIsCreating(false)
   }
 
   useEffect(() => {

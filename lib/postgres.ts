@@ -286,3 +286,38 @@ export const getRecentProducts = async () => {
 
   return rows
 }
+
+export const saveProductPurchase = async ({
+  product_id: productId,
+  address,
+  amount,
+  purchase_tx_hash,
+  status,
+}: {
+  product_id: string
+  address: string
+  amount: string
+  purchase_tx_hash: string
+  status: string
+}) => {
+  try {
+    const res = await executeQuery(
+      `INSERT INTO h3lp_purchases (product_id, address, amount, purchase_tx_hash, status) VALUES ($1, $2, $3, $4, $5)`,
+      [productId, address, amount, purchase_tx_hash, status]
+    )
+    return res.rows
+  } catch (error) {
+    console.error("🔴 Error in saveProductPurchase:", error)
+    await postErrorToDiscord(
+      "🔴 Error in saveProductPurchase: " +
+        JSON.stringify({
+          productId,
+          address,
+          amount,
+          purchase_tx_hash,
+          status,
+        })
+    )
+    return false
+  }
+}

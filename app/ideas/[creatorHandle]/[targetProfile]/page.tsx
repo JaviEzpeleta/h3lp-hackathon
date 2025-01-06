@@ -25,8 +25,8 @@ const IdeasPage = () => {
       console.log("fetching ideas....")
 
       const res = await axios.post("/api/ideas/get", {
-        creator: params.fromHandle,
-        target: params.handle,
+        creator: params.creatorHandle,
+        target: params.targetProfile,
       })
 
       const data = res.data.data

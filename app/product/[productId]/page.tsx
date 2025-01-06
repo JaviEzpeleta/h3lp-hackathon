@@ -63,6 +63,16 @@ const ProductPage = () => {
       hash,
     })
 
+  useEffect(() => {
+    if (isConfirmed && hash) {
+      axios.post("/api/products/buy", {
+        productId,
+        userAddress: address,
+        txHash: hash,
+      })
+    }
+  }, [isConfirmed, hash])
+
   const launchBuy = async () => {
     try {
       if (!product) return
@@ -91,8 +101,6 @@ const ProductPage = () => {
         <p className="text-2xl font-bold">No product found!</p>
       </div>
     )
-
-  console.log("product", product)
 
   return (
     <div className="max-w-5xl mx-auto px-2 pt-32 space-y-4">
