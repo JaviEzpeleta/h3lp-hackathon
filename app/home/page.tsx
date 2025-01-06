@@ -58,11 +58,13 @@ const HomePage = () => {
   }
 
   return (
-    <div className="max-w-5xl mx-auto">
+    <div className="max-w-5xl mx-auto pt-40">
       <div className="max-w-xl mx-auto space-y-4 px-2">
-        <div>
+        <div className="flex flex-col items-center text-center justify-center gap-1">
           <Title>Search for a Lens user</Title>
-          <SubTitle>(it can be yourself too!)</SubTitle>
+          <div className="opacity-70">
+            <SubTitle>(it can be yourself too!)</SubTitle>
+          </div>
         </div>
         <AnimatePresence>
           {!isSearching && (

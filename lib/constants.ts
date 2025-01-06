@@ -80,7 +80,7 @@ export const RPC_PROVIDER_URL = "https://rpc.testnet.lens.dev"
 export const BLOCK_EXPLORER_URL = "https://block-explorer.testnet.lens.dev"
 
 export const SMOL_GUMROAD_CONTRACT_ADDRESS =
-  "0x843E33e732F20900E6CE9C64EE075Eb5a1CB1fff"
+  "0x61D27EcBfc03dA682DF7bC804dA8f49542ecE802"
 
 export const PROFILE_PAGES_TO_PARSE = 12
 

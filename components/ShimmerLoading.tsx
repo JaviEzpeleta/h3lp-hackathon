@@ -15,12 +15,12 @@ const ShimmerLoading = ({ text }: { text: string }) => {
             filter: ["blur(0px)", "blur(1px)", "blur(1px)", "blur(0px)"],
           }}
           transition={{
-            duration: 1.6,
+            duration: 1.3,
             repeat: Infinity,
             delay: i * 0.1, // cada letra empieza 0.1s después que la anterior
             ease: "easeInOut",
           }}
-          className="inline-block font-bold text-3xl font-sans antialiased"
+          className="inline-block font-bold text-3xl font-sans antialiased min-w-2 select-none"
         >
           {char}
         </motion.span>

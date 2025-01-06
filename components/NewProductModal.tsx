@@ -8,11 +8,15 @@ import { Textarea } from "./ui/textarea"
 import { Button } from "./ui/button"
 import { GeneratedIdea, LensSavedProfile } from "@/lib/types"
 import Title from "./Title"
+import SubTitle from "./SubTitle"
 import MiniTitle from "./MiniTitle"
 import { RadioGroup, RadioGroupItem } from "./ui/radio-group"
 import useStore from "@/lib/zustandStore"
 import { useToast } from "@/hooks/use-toast"
 import axios from "axios"
+import LoadingComponent from "@/components/LoadingComponent"
+import BlurryEntranceFaster from "./BlurryEntranceFaster"
+import Link from "next/link"
 
 const NewProductModal = ({
   idea,
@@ -29,9 +33,11 @@ const NewProductModal = ({
   fromProfile: LensSavedProfile
   toProfile: LensSavedProfile
 }) => {
+  const [isCreating, setIsCreating] = useState(false)
   const [description, setDescription] = useState("")
   const [title, setTitle] = useState("")
   const [price, setPrice] = useState<number>(0)
+  const [productCreated, setProductCreated] = useState<number | null>(null)
 
   const { userSession } = useStore()
 
@@ -50,6 +56,8 @@ const NewProductModal = ({
       return false
     }
 
+    setIsCreating(true)
+
     const product = {
       name: title,
       description: description,
@@ -67,6 +75,15 @@ const NewProductModal = ({
     // console.log(idea)
 
     const response = await axios.post("/api/create-product", product)
+    console.log(" 📁  response")
+    console.log(response)
+    console.log(" 📁  response.data")
+    console.log(response.data)
+
+    const productId = response.data.data
+
+    setProductCreated(productId)
+    setIsCreating(false)
   }
 
   useEffect(() => {
@@ -77,86 +94,142 @@ const NewProductModal = ({
     }
   }, [idea])
 
+  const onCloseEvent = () => {
+    if (isCreating) return
+    setProductCreated(null)
+    onClose()
+  }
+
   return (
-    <Dialog open={modalOn} onOpenChange={onClose}>
-      <DialogContent className="selection:bg-black/60 selection:text-rfGreen">
-        <DialogHeader>
-          <DialogTitle>
-            <Title>Create a new product</Title>
-          </DialogTitle>
-        </DialogHeader>
+    <Dialog open={modalOn} onOpenChange={onCloseEvent}>
+      <DialogContent
+        className={`selection:bg-black/60 selection:text-rfGreen ${
+          isCreating ? "[&>button]:hidden" : ""
+        }`}
+      >
+        <>
+          {productCreated ? (
+            <DialogHeader>
+              <DialogTitle>
+                <BlurryEntranceFaster>
+                  <Title>Product Created!!</Title>
+                </BlurryEntranceFaster>
+                <BlurryEntranceFaster delay={0.3}>
+                  <div className="flex items-center gap-2 pt-14">
+                    <Link href={`/products/${productCreated}`}>
+                      <Button>Go to the product page</Button>
+                    </Link>
+                    <Button
+                      variant="outline"
+                      onClick={() => {
+                        setProductCreated(null)
+                        onClose()
+                      }}
+                    >
+                      Create more products
+                    </Button>
+                  </div>
+                </BlurryEntranceFaster>
+              </DialogTitle>
+            </DialogHeader>
+          ) : (
+            <>
+              {isCreating ? (
+                <DialogHeader>
+                  <DialogTitle>
+                    <div className="flex justify-center items-center h-80">
+                      <LoadingComponent text="Creating the product..." />
+                    </div>
+                  </DialogTitle>
+                </DialogHeader>
+              ) : (
+                <>
+                  <DialogHeader>
+                    <DialogTitle>
+                      <Title>Create a new product</Title>
+                    </DialogTitle>
+                  </DialogHeader>
 
-        <div className="flex flex-col gap-1">
-          <Label>
-            <div className="opacity-70">
-              <MiniTitle>Title</MiniTitle>
-            </div>
-          </Label>
-          <Input
-            className="!text-xl font-bold"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />
-        </div>
-        <div className="flex flex-col gap-1">
-          <Label>
-            <div className="opacity-70">
-              <MiniTitle>Description</MiniTitle>
-            </div>
-          </Label>
-          <Textarea
-            value={description}
-            rows={5}
-            className="!text-base font-semibold"
-            onChange={(e) => setDescription(e.target.value)}
-          />
-        </div>
-        <div className="flex justify-between">
-          <div className="flex flex-col gap-1">
-            <Label>
-              <div className="opacity-70">
-                <MiniTitle>Price</MiniTitle>
-              </div>
-            </Label>
-            <div className="flex items-center gap-2">
-              <Input
-                type="number"
-                value={price}
-                min={0}
-                step={0.01}
-                className="!text-base font-semibold w-32"
-                onChange={(e) => setPrice(Number(e.target.value))}
-              />
-              <div className="text-sm font-semibold">$GRASS</div>
-            </div>
-          </div>
-          <div className="flex flex-col gap-1 justify-center items-center">
-            <RadioGroup defaultValue="option-one">
-              <div className="flex items-center space-x-2 active:opacity-60">
-                <RadioGroupItem value="option-one" id="option-one" />
-                <Label
-                  htmlFor="option-one"
-                  className="text-base font-semibold cursor-pointer"
-                >
-                  One-time
-                </Label>
-              </div>
-              <div className="flex items-center space-x-2 active:opacity-60">
-                <RadioGroupItem value="option-two" id="option-two" />
-                <Label
-                  htmlFor="option-two"
-                  className="text-base font-semibold cursor-pointer"
-                >
-                  Recurring (Monthly)
-                </Label>
-              </div>
-            </RadioGroup>{" "}
-          </div>
-        </div>
+                  <div className="flex flex-col gap-1">
+                    <Label>
+                      <div className="opacity-70">
+                        <MiniTitle>Title</MiniTitle>
+                      </div>
+                    </Label>
+                    <Input
+                      className="!text-xl font-bold"
+                      value={title}
+                      onChange={(e) => setTitle(e.target.value)}
+                    />
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <Label>
+                      <div className="opacity-70">
+                        <MiniTitle>Description</MiniTitle>
+                      </div>
+                    </Label>
+                    <Textarea
+                      value={description}
+                      rows={5}
+                      className="!text-base font-semibold"
+                      onChange={(e) => setDescription(e.target.value)}
+                    />
+                  </div>
+                  <div className="flex justify-between">
+                    <div className="flex flex-col gap-1">
+                      <Label>
+                        <div className="opacity-70">
+                          <MiniTitle>Price</MiniTitle>
+                        </div>
+                      </Label>
+                      <div className="flex items-center gap-2">
+                        <Input
+                          type="number"
+                          value={price}
+                          min={0}
+                          step={0.01}
+                          className="!text-base font-semibold w-32"
+                          onChange={(e) => setPrice(Number(e.target.value))}
+                        />
+                        <div className="text-sm font-semibold">$GRASS</div>
+                      </div>
+                    </div>
+                    <div className="flex flex-col gap-1 justify-center items-center">
+                      <RadioGroup defaultValue="option-one">
+                        <div className="flex items-center space-x-2 active:opacity-60">
+                          <RadioGroupItem value="option-one" id="option-one" />
+                          <Label
+                            htmlFor="option-one"
+                            className="text-base font-semibold cursor-pointer"
+                          >
+                            One-time
+                          </Label>
+                        </div>
+                        <div className="flex items-center space-x-2 active:opacity-60">
+                          <RadioGroupItem value="option-two" id="option-two" />
+                          <Label
+                            htmlFor="option-two"
+                            className="text-base font-semibold cursor-pointer"
+                          >
+                            Recurring (Monthly)
+                          </Label>
+                        </div>
+                      </RadioGroup>{" "}
+                    </div>
+                  </div>
 
-        <Button onClick={saveClicked} className="rounded-full" size="xl">
-          Create this product!
-        </Button>
+                  <Button
+                    onClick={saveClicked}
+                    className="rounded-full"
+                    size="xl"
+                  >
+                    Create this product!
+                  </Button>
+                </>
+              )}
+            </>
+          )}
+        </>
       </DialogContent>
     </Dialog>
   )

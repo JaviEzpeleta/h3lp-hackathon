@@ -2,7 +2,7 @@
 import { motion } from "framer-motion"
 import ShimmerLoading from "./ShimmerLoading"
 
-const LoadingComponent = () => {
+const LoadingComponent = ({ text = "loading..." }: { text?: string }) => {
   return (
     <motion.div
       className=""
@@ -10,7 +10,7 @@ const LoadingComponent = () => {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -12 }}
     >
-      <ShimmerLoading text="loading..." />
+      <ShimmerLoading text={text} />
     </motion.div>
   )
 }
