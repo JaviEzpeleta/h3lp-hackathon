@@ -35,10 +35,11 @@ const IdeasList = ({
         modalOn={selectedIdea !== null}
       />
       <div className="text-center">
-        <BigTitle>Products & Service</BigTitle>
-        <BigTitle>Products & Service</BigTitle>
+        <BigTitle>Products & Services</BigTitle>
         <BigTitle>
-          <div className="text-indigo-700">(Ideas)</div>
+          <div className="text-indigo-800">
+            (Ideas<span className="text-ttRed">*</span>)
+          </div>
         </BigTitle>
         <Title>
           <div className="inline-flex items-center gap-2 pt-1">

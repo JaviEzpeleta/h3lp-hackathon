@@ -5,6 +5,7 @@ import * as RadioGroupPrimitive from "@radix-ui/react-radio-group"
 import { Circle } from "lucide-react"
 
 import { cn } from "@/lib/utils"
+import { motion } from "framer-motion"
 
 const RadioGroup = React.forwardRef<
   React.ElementRef<typeof RadioGroupPrimitive.Root>,
@@ -34,7 +35,12 @@ const RadioGroupItem = React.forwardRef<
       {...props}
     >
       <RadioGroupPrimitive.Indicator className="flex items-center justify-center">
-        <Circle className="h-5 w-5 fill-primary" />
+        <motion.div
+          initial={{ scale: 0.4, filter: "blur(2px)", opacity: 0 }}
+          animate={{ scale: 1, filter: "blur(0px)", opacity: 1 }}
+        >
+          <Circle className="h-5 w-5 fill-rfGreen" />
+        </motion.div>
       </RadioGroupPrimitive.Indicator>
     </RadioGroupPrimitive.Item>
   )

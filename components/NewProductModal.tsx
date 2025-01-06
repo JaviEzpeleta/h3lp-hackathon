@@ -8,7 +8,6 @@ import { Textarea } from "./ui/textarea"
 import { Button } from "./ui/button"
 import { GeneratedIdea } from "@/lib/types"
 import Title from "./Title"
-import SubTitle from "./SubTitle"
 import MiniTitle from "./MiniTitle"
 import { RadioGroup, RadioGroupItem } from "./ui/radio-group"
 
@@ -27,6 +26,10 @@ const NewProductModal = ({
   const [title, setTitle] = useState("")
   const [price, setPrice] = useState<number>(0)
 
+  const saveClicked = () => {
+    console.log(" VAMOS A GUARDAARRRRRR!!!!!")
+  }
+
   // useEffect(() => {
   //   const descriptionParts = doc.description
   //     .split(":::")
@@ -44,7 +47,7 @@ const NewProductModal = ({
 
   return (
     <Dialog open={modalOn} onOpenChange={onClose}>
-      <DialogContent>
+      <DialogContent className="selection:bg-black/60 selection:text-rfGreen">
         <DialogHeader>
           <DialogTitle>
             <Title>Create a new product</Title>
@@ -90,22 +93,28 @@ const NewProductModal = ({
                 min={0}
                 step={0.01}
                 className="!text-base font-semibold w-28"
-                onChange={(e) => setPrice(e.target.value)}
+                onChange={(e) => setPrice(Number(e.target.value))}
               />
               <div className="text-sm font-semibold">$GRASS</div>
             </div>
           </div>
           <div className="flex flex-col gap-1 justify-center items-center">
             <RadioGroup defaultValue="option-one">
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-2 active:opacity-60">
                 <RadioGroupItem value="option-one" id="option-one" />
-                <Label htmlFor="option-one" className="text-lg font-semibold">
+                <Label
+                  htmlFor="option-one"
+                  className="text-lg font-semibold cursor-pointer"
+                >
                   One-time
                 </Label>
               </div>
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-2 active:opacity-60">
                 <RadioGroupItem value="option-two" id="option-two" />
-                <Label htmlFor="option-two" className="text-lg font-semibold">
+                <Label
+                  htmlFor="option-two"
+                  className="text-lg font-semibold cursor-pointer"
+                >
                   Recurring (Monthly)
                 </Label>
               </div>
@@ -113,8 +122,8 @@ const NewProductModal = ({
           </div>
         </div>
 
-        <Button onClick={() => onSave(title + " ::: " + description)}>
-          Save Changes
+        <Button onClick={saveClicked} className="rounded-full">
+          Create this product
         </Button>
       </DialogContent>
     </Dialog>
