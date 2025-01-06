@@ -6,7 +6,7 @@ import {
   BLOCK_EXPLORER_URL,
   SMOL_GUMROAD_CONTRACT_ADDRESS,
 } from "@/lib/constants"
-import { Product, ProductInList } from "@/lib/types"
+import { ProductInList } from "@/lib/types"
 import axios from "axios"
 import { ExternalLink } from "lucide-react"
 import Link from "next/link"
@@ -28,6 +28,7 @@ import MiniTitle from "@/components/MiniTitle"
 import BigPriceTag from "@/components/BigPriceTag"
 import { cleanHandle } from "@/lib/strings"
 import { useToast } from "@/hooks/use-toast"
+import PuchaseConfirmationComponent from "@/components/PuchaseConfirmationComponent"
 
 const ProductPage = () => {
   const { productId } = useParams() as { productId: string }
@@ -109,7 +110,7 @@ const ProductPage = () => {
     )
 
   return (
-    <div className="max-w-5xl mx-auto px-2 pt-32 space-y-4">
+    <div className="max-w-5xl mx-auto px-2 py-32 space-y-4">
       <div className="flex flex-col md:flex-row md:items-center md:gap-8 justify-between">
         <div className="flex-1">
           <BigTitle>{product.name}</BigTitle>
@@ -157,65 +158,75 @@ const ProductPage = () => {
         </div>
       </div>
       <MiniTitle>{product.description}</MiniTitle>
-      <div className="py-3">
-        <Link
-          href={`${BLOCK_EXPLORER_URL}/tx/${product.tx_hash}`}
-          target="_blank"
-          // className="text-sm text-indigo-300 hover:text-indigo-400 transition-all ease-out active:opacity-50"
-        >
-          <Button variant="outline">
-            <div className="flex items-center gap-2">
-              <ExternalLink size={16} />
-              <div>creation tx on block explorer</div>
-            </div>
-          </Button>
-        </Link>
-      </div>
 
-      <div className="flex justify-center">
-        <div className="p-6 bg-zinc-100 rounded-lg flex flex-col items-center justify-center gap-2">
-          <div className="flex">
-            <MiniTitle>
-              You have: {/* <div className="p-2 bg-zinc-900 rounded-md"> */}
-              {balance
-                ? Number(formatUnits(balance.value, 18)).toFixed(2)
-                : 0}{" "}
-              $GRASS
-              {/* </div> */}
-            </MiniTitle>
-          </div>
-          <div>
-            <Button
-              size="xl"
-              onClick={launchBuy}
-              disabled={isPending || isConfirming}
+      {!(isConfirmed && isConfirmed) && (
+        <>
+          <div className="py-3">
+            <Link
+              href={`${BLOCK_EXPLORER_URL}/tx/${product.tx_hash}`}
+              target="_blank"
+              // className="text-sm text-indigo-300 hover:text-indigo-400 transition-all ease-out active:opacity-50"
             >
-              {isPending || isConfirming ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  {isPending ? "In progress..." : "Waiting for confirmation..."}
-                </>
-              ) : (
-                `Buy for ${product?.price} $GRASS`
-              )}
-            </Button>
+              <Button variant="outline">
+                <div className="flex items-center gap-2">
+                  <ExternalLink size={16} />
+                  <div>creation tx on block explorer</div>
+                </div>
+              </Button>
+            </Link>
           </div>
-        </div>
-      </div>
+
+          <div className="flex justify-center">
+            <div className="p-6 bg-zinc-100 rounded-lg flex flex-col items-center justify-center gap-2">
+              <div className="flex">
+                <MiniTitle>
+                  You have: {/* <div className="p-2 bg-zinc-900 rounded-md"> */}
+                  {balance
+                    ? Number(formatUnits(balance.value, 18)).toFixed(2)
+                    : 0}{" "}
+                  $GRASS
+                  {/* </div> */}
+                </MiniTitle>
+              </div>
+              <div>
+                <Button
+                  size="xl"
+                  onClick={launchBuy}
+                  disabled={isPending || isConfirming}
+                >
+                  {isPending || isConfirming ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      {isPending
+                        ? "In progress..."
+                        : "Waiting for confirmation..."}
+                    </>
+                  ) : (
+                    `Buy for ${product?.price} $GRASS`
+                  )}
+                </Button>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
 
       {hash && (
         <Alert>
           <AlertDescription className="font-mono break-all">
-            Transaction Hash: {hash}
+            Tx:{" "}
+            <Link
+              href={`${BLOCK_EXPLORER_URL}/tx/${hash}`}
+              target="_blank"
+              className="text-ttRed hover:underline active:opacity-50"
+            >
+              {hash}
+            </Link>
           </AlertDescription>
         </Alert>
       )}
 
-      {isConfirmed && (
-        <Alert>
-          <AlertDescription>Purchase confirmed successfully!</AlertDescription>
-        </Alert>
-      )}
+      {isConfirmed && <PuchaseConfirmationComponent />}
 
       {error && (
         <Alert variant="destructive">
