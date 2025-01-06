@@ -1,26 +1,24 @@
-import { postErrorToDiscord, postToDiscord } from "@/lib/discord"
-import { fetchLensProfileByAddress, generateProfileFacts } from "@/lib/lens-api"
-import {
-  getLensProfileByAddress,
-  getProductById,
-  saveLensProfileObject,
-} from "@/lib/postgres"
-import { LensSavedProfile, ProfileFetchedFromGraphQL } from "@/lib/types"
+import { getLensProfileByAddress, getProductById } from "@/lib/postgres"
 import { NextResponse } from "next/server"
 
 export async function POST(request: Request) {
+  console.log("HELLO 🐔 ")
+
   try {
     const { productId } = await request.json()
 
+    console.log("the productId is", productId)
+
     const product = await getProductById(productId)
 
+    console.log("product", product)
     if (!product) {
       return NextResponse.json({ error: "Product not found" }, { status: 404 })
     }
 
-    const productCreator = await getLensProfileByAddress(
-      product.creator_address
-    )
+    const productCreator = await getLensProfileByAddress(product.created_by)
+
+    console.log("productCreator", productCreator)
 
     if (!productCreator) {
       return NextResponse.json(
@@ -28,6 +26,8 @@ export async function POST(request: Request) {
         { status: 404 }
       )
     }
+
+    product.creator = productCreator
 
     return NextResponse.json({ data: product })
   } catch (error) {
