@@ -1,9 +1,16 @@
 import { postErrorToDiscord } from "@/lib/discord"
-import { getProductsAndServicesByHandleItself } from "@/lib/lens-api"
+import {
+  fetchLensProfileByAddress,
+  generateProfileFacts,
+  getProductsAndServicesByHandleItself,
+  getProfileByHandle,
+} from "@/lib/lens-api"
 import {
   findIdeasByFromHandleToHandle,
   getSavedProfileByHandle,
+  saveLensProfileObject,
 } from "@/lib/postgres"
+import { LensSavedProfile, ProfileFetchedFromGraphQL } from "@/lib/types"
 import { NextResponse } from "next/server"
 
 export async function POST(request: Request) {
@@ -52,7 +59,49 @@ export async function POST(request: Request) {
     } else {
       console.log(" 🔥 🔥 🔥 🔥 🔥  handle !== fromHandle SON DIFERENTES")
 
-      const profile = await getSavedProfileByHandle(handle)
+      let profile = await getSavedProfileByHandle(handle)
+      if (!profile) {
+        // ! start creating profile entry
+
+        const profileFetched = (await getProfileByHandle(
+          handle
+        )) as ProfileFetchedFromGraphQL
+        console.log("🐔 🐔 🐔 🐔  Got profile from lens api:", profileFetched)
+
+        if (!profileFetched) {
+          await postErrorToDiscord("profile_not_found for handle: " + handle)
+          return NextResponse.json(
+            { error: "No profile found" },
+            { status: 404 }
+          )
+        }
+
+        const profileFacts = await generateProfileFacts(profileFetched)
+        if (!profileFacts) {
+          await postErrorToDiscord("Error after `generateProfileFacts()`")
+          return NextResponse.json(
+            { error: "Error after `generateProfileFacts()`" },
+            { status: 500 }
+          )
+        }
+
+        const objetToInsert = {
+          id: profileFetched.id,
+          address: profileFetched.ownedBy,
+          handle: profileFetched.handle,
+          display_name: profileFetched.displayName,
+          profile_picture: profileFetched.picture,
+          cover_picture: profileFetched.coverPicture,
+          bio: profileFetched.bio,
+          facts: profileFacts,
+        } as LensSavedProfile
+
+        await saveLensProfileObject(objetToInsert)
+
+        profile = objetToInsert
+        // ! end creating profile entry
+      }
+
       if (!profile) {
         console.log(" 🔥 🔥 🔥 🔥 🔥  NO profile", handle)
         return NextResponse.json({
@@ -73,9 +122,6 @@ export async function POST(request: Request) {
       console.log(
         " 🔥 🔥 🔥 🔥 🔥  OK tengo el profile y el from profile... TIME TO ROCK!!!!!!!"
       )
-
-      // sleep for 10 seconds:
-      // await new Promise((resolve) => setTimeout(resolve, 10000))
 
       return NextResponse.json({ success: true, data: { handle, fromHandle } })
     }

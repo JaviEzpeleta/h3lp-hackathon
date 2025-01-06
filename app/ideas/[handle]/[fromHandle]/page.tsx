@@ -52,7 +52,7 @@ const IdeasPage = () => {
   }, [params])
 
   return (
-    <div className="flex flex-col items-center justify-center">
+    <div className="flex flex-col items-center justify-center pt-28 md:pt-40">
       {isSearching && (
         <div className="py-48">
           <LoadingComponent />
