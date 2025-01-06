@@ -55,8 +55,8 @@ const ProductInListComponent = ({
             </PriceTag>
           </div>
         </div>
-        <div className="h-full absolute right-0 w-[80px] flex justify-end p-1 pt-4 pr-2">
-          <div className="flex flex-wrap items-start justify-end gap-0">
+        <div className="absolute right-0 top-0 w-[80px] flex justify-end p-1 pt-4 pr-2">
+          <div className="flex flex-wrap gap-0 items-start justify-end">
             {product.inspired_by_publication_ids.map((id, index) => (
               <div key={index}>
                 <Link

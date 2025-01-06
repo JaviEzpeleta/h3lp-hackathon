@@ -1,6 +1,5 @@
 import axios from "axios"
 import {
-  DISCORD_VISITS_WEBHOOK_URL,
   DISCORD_WEBHOOK_ERRORS_URL,
   DISCORD_WEBHOOK_URL,
   IS_LOCALHOST,
@@ -27,22 +26,6 @@ export const postToDiscord = async (message: string) => {
     await axios.post(DISCORD_WEBHOOK_URL, params)
   } catch (error) {
     console.log(" - 🧠 Error posting to Discord (2) (probably 429)")
-  }
-}
-
-export const postWebVisitToDiscord = async (message: string) => {
-  console.log(" ABOUT TO TRACK THIS VISIT.... 🔥")
-
-  // if (IS_LOCALHOST) return false
-  const params = {
-    username: "smol-tracker",
-    content: message,
-  }
-  try {
-    if (DISCORD_VISITS_WEBHOOK_URL)
-      axios.post(DISCORD_VISITS_WEBHOOK_URL, params)
-  } catch (error) {
-    console.error(" 🔴 postWebVisitToDiscord error:", error)
   }
 }
 

@@ -38,14 +38,9 @@ export const GPT4oB = "gpt-4o-2024-08-06"
 export const GPT3_5_TURBO = "gpt-3.5-turbo"
 export const GPT4oMini = "gpt-4o-mini"
 
-export const DISCORD_VISITS_WEBHOOK_URL =
-  "https://discord.com/api/webhooks/1281995298712846509/XtSvHg7GB5z3VNm8e6bdH-d32uGVvBKsMcj40_gbomop_l4qX3vtPQyzbWSB2Kb5lTMt"
-
-export const DISCORD_WEBHOOK_URL =
-  "https://discord.com/api/webhooks/1257350141505966185/REzknojXsYeOoHuiKr14MnUlxgElvtLDAcpW0fGElTwPnZy9tGNENMBhcOl6ZTncF2DY"
-
-export const DISCORD_WEBHOOK_ERRORS_URL =
-  "https://discord.com/api/webhooks/1257350986046111754/hKHqJw1O_Wv_owlfqR9GRXzpJCkLaHq1FHlfKgI8019AAO3DQFmIlmP51Vb7WXt7JXYU"
+export const DISCORD_WEBHOOK_URL = process.env.DISCORD_WEBHOOK_URL as string
+export const DISCORD_WEBHOOK_ERRORS_URL = process.env
+  .DISCORD_WEBHOOK_ERRORS_URL as string
 
 export const SEND_FROM = "smol apps<hi@smolapps.com>"
 export const SEND_TO = "javierezpeleta@gmail.com"
