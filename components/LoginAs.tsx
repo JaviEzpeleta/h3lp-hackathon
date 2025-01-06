@@ -30,7 +30,7 @@ export function LoginAs({ profile, wallet, onSuccess }: LoginAsProps) {
 
   return (
     <div
-      className="flex items-center text-white p-2 px-6 cursor-pointer hover:text-black transition-all duration-100 ease-out rounded-lg justify-center space-x-4 bg-zinc-800 hover:bg-primary/60 active:opacity-50"
+      className="flex items-center text-white p-2 px-6 cursor-pointer hover:text-bbBlack transition-all duration-100 ease-out rounded-lg justify-center space-x-4 bg-zinc-800 hover:bg-primary/60 active:opacity-50"
       onClick={login}
     >
       <img

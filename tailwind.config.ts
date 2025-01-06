@@ -15,6 +15,7 @@ export default {
         primary: "#0ed3c1",
         rfGreen: "#47ec93",
         ttRed: "#fe2c55",
+        bbBlack: "#2c2d30",
       },
       borderRadius: {
         lg: "var(--radius)",

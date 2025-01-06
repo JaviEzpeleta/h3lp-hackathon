@@ -1,5 +1,9 @@
 import { postErrorToDiscord } from "@/lib/discord"
-import { getLensProfileByAddress, getProductById } from "@/lib/postgres"
+import {
+  getLensProfileByAddress,
+  getProductById,
+  saveProductPurchase,
+} from "@/lib/postgres"
 import { NextResponse } from "next/server"
 
 export async function POST(request: Request) {

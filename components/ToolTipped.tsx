@@ -39,7 +39,7 @@ const ToolTipped = ({
           className="bg-white/40 backdrop-blur-md border-2 border-black/30"
           side={side}
         >
-          <p className="text-lg max-w-xs text-black/90 px-2 font-shantellSans font-semibold">
+          <p className="text-lg max-w-xs text-bbBlack/90 px-2 font-shantellSans font-semibold">
             {textMap[text] || text}
           </p>
         </TooltipContent>

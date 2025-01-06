@@ -27,6 +27,7 @@ import BigTitle from "@/components/BigTitle"
 import MiniTitle from "@/components/MiniTitle"
 import BigPriceTag from "@/components/BigPriceTag"
 import { cleanHandle } from "@/lib/strings"
+import { useToast } from "@/hooks/use-toast"
 
 const ProductPage = () => {
   const { productId } = useParams() as { productId: string }
@@ -58,6 +59,7 @@ const ProductPage = () => {
 
   const { data: hash, isPending, writeContract } = useWriteContract()
 
+  const { toast } = useToast()
   const { isLoading: isConfirming, isSuccess: isConfirmed } =
     useWaitForTransactionReceipt({
       hash,
@@ -69,6 +71,10 @@ const ProductPage = () => {
         productId,
         userAddress: address,
         txHash: hash,
+      })
+      toast({
+        title: "Purchase confirmed successfully!",
+        description: `LFG LFG LFG Transaction Hash: ${hash}`,
       })
     }
   }, [isConfirmed, hash])
@@ -187,7 +193,7 @@ const ProductPage = () => {
               {isPending || isConfirming ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  {isPending ? "Confirming..." : "Waiting for confirmation..."}
+                  {isPending ? "In progress..." : "Waiting for confirmation..."}
                 </>
               ) : (
                 `Buy for ${product?.price} $GRASS`

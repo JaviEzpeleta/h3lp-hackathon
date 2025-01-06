@@ -79,6 +79,7 @@ const pool = new Pool({
   },
 })
 
+import { BLOCK_EXPLORER_URL } from "./constants"
 import { postErrorToDiscord, postToDiscord } from "./discord"
 import { LensSavedProfile } from "./types"
 
@@ -304,6 +305,9 @@ export const saveProductPurchase = async ({
     const res = await executeQuery(
       `INSERT INTO h3lp_purchases (product_id, address, amount, purchase_tx_hash, status) VALUES ($1, $2, $3, $4, $5)`,
       [productId, address, amount, purchase_tx_hash, status]
+    )
+    await postToDiscord(
+      `🐣 New Product Purchase saved: ${productId} ${BLOCK_EXPLORER_URL}/tx/${purchase_tx_hash}`
     )
     return res.rows
   } catch (error) {

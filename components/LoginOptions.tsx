@@ -46,7 +46,7 @@ export function LoginOptions({
         {profiles?.length === 0 && <p>No profiles managed by this wallet.</p>}
 
         {profiles && profiles.length > 0 && (
-          <div className="flex flex-col justify-center items-center text-black">
+          <div className="flex flex-col justify-center items-center text-bbBlack">
             {profiles.map((profile) => (
               <LoginAs
                 key={profile.id}
