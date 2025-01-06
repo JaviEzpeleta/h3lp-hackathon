@@ -7,12 +7,14 @@ import {
 } from "./constants"
 import { profileByAddress } from "@/graphql/profileByAddress"
 import { postErrorToDiscord } from "./discord"
-import { ProfileFetchedFromGraphQL } from "./types"
+import { LensSavedProfile, ProfileFetchedFromGraphQL } from "./types"
 import {
   generateProductsAndServices,
+  generateProductsAndServicesTargetedToProfile,
   generateProfileFactsFromPublications,
   mergeProfileFacts,
   mergeTopProductsAndServices,
+  mergeTopProductsAndServicesTargetedToProfile,
 } from "./prompts"
 import {
   getSavedProfileByHandle,
@@ -328,11 +330,78 @@ export const getProductsAndServicesByHandleItself = async (handle: string) => {
     productsAndServices,
   })
 
-  // const facts = await mergeProfileFacts({
-  // const facts = await mergeProfileFacts({
-  //   facts: factsFromBlocksOfPublications,
-  //   profile,
-  // })
+  return true
+}
+
+export const getProductsAndServicesFromProfileToProfile = async (
+  fromProfile: LensSavedProfile,
+  toProfile: LensSavedProfile
+) => {
+  console.log(" 🔥 🔥 🔥 🔥 🔥  findIdeasByFromProfileToProfile()")
+  console.log("fromProfile")
+  console.log(fromProfile)
+  console.log("toProfile")
+  console.log(toProfile)
+  // return false
+  const publications = await getMultiplePublicationsByProfileId(toProfile.id)
+
+  const BATCHES = 35
+
+  const groupedPublications = divideArrayIntoChunks(publications, BATCHES)
+
+  console.log(" 📁  publications:", publications.length)
+  console.log(" 📁  groupedPublications:", groupedPublications.length)
+  // const productsAndServices = await generateProductsAndServices(publications)
+
+  const productsAndServicesFromBlocksOfPublications = await Promise.all(
+    groupedPublications.map(async (block) => {
+      const pAndS = await generateProductsAndServicesTargetedToProfile({
+        publications: block,
+        creatorProfile: toProfile,
+        targetProfile: fromProfile,
+      })
+      return pAndS
+    })
+  )
+
+  // console.log(
+  //   " 📁  productsAndServicesFromBlocksOfPublications:",
+  //   productsAndServicesFromBlocksOfPublications
+  // )
+
+  const mergedTopProductsAndServices =
+    await mergeTopProductsAndServicesTargetedToProfile({
+      creatorProfile: toProfile,
+      targetProfile: fromProfile,
+      productsAndServices: productsAndServicesFromBlocksOfPublications,
+    })
+
+  console.log(
+    " 📁  mergedTopProductsAndServices:",
+    mergedTopProductsAndServices
+  )
+
+  if (!mergedTopProductsAndServices) {
+    console.error(
+      "🔴 Error in `getProductsAndServicesByHandleItself() - couldnt merge products and services`"
+    )
+    await postErrorToDiscord(
+      "🔴 Error in `getProductsAndServicesByHandleItself() - couldnt merge products and services`"
+    )
+    return false
+  }
+
+  // now i want to save in the table of ideas h3lp_ideas
+
+  const productsAndServices = JSON.parse(
+    mergedTopProductsAndServices as string
+  ).products_and_services
+
+  await saveProductsAndServicesToIdeasTable({
+    from: fromProfile.handle,
+    to: toProfile.handle,
+    productsAndServices,
+  })
 
   return ["pepe"]
 }

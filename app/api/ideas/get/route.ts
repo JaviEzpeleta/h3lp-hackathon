@@ -1,5 +1,5 @@
 import {
-  findIdeasByFromHandleToHandle,
+  findIdeasFromHandleToHandle,
   getSavedProfileByHandle,
 } from "@/lib/postgres"
 import { NextResponse } from "next/server"
@@ -17,7 +17,7 @@ export async function POST(request: Request) {
       to = `lens/${to}`
     }
 
-    const ideas = await findIdeasByFromHandleToHandle(from, to)
+    const ideas = await findIdeasFromHandleToHandle(from, to)
     if (!ideas) return NextResponse.json({ success: false, data: [] })
 
     const fromProfile = await getSavedProfileByHandle(from)

@@ -1,12 +1,12 @@
 import { postErrorToDiscord } from "@/lib/discord"
 import {
-  fetchLensProfileByAddress,
   generateProfileFacts,
   getProductsAndServicesByHandleItself,
+  getProductsAndServicesFromProfileToProfile,
   getProfileByHandle,
 } from "@/lib/lens-api"
 import {
-  findIdeasByFromHandleToHandle,
+  findIdeasFromHandleToHandle,
   getSavedProfileByHandle,
   saveLensProfileObject,
 } from "@/lib/postgres"
@@ -43,7 +43,7 @@ export async function POST(request: Request) {
     if (handle === fromHandle) {
       console.log(" 🔥 🔥 🔥 🔥 🔥  handle === fromHandle SON IGUALES")
 
-      const findSavedIdeas = await findIdeasByFromHandleToHandle(handle, handle)
+      const findSavedIdeas = await findIdeasFromHandleToHandle(handle, handle)
 
       if (findSavedIdeas && findSavedIdeas.length > 0) {
         console.log(" 🔥 🔥 🔥 🔥 🔥  FOUND SavedIdeas yay!!!", findSavedIdeas)
@@ -122,6 +122,23 @@ export async function POST(request: Request) {
       console.log(
         " 🔥 🔥 🔥 🔥 🔥  OK tengo el profile y el from profile... TIME TO ROCK!!!!!!!"
       )
+
+      const findSavedIdeas = await findIdeasFromHandleToHandle(
+        fromHandle,
+        handle
+      )
+
+      if (findSavedIdeas && findSavedIdeas.length > 0) {
+        console.log(" 🔥 🔥 🔥 🔥 🔥  FOUND SavedIdeas yay!!!", findSavedIdeas)
+        return NextResponse.json({
+          success: true,
+          data: { handle, fromHandle },
+        })
+      } else {
+        console.log("THIS IS THE MOMENT...")
+        await getProductsAndServicesFromProfileToProfile(fromProfile, profile)
+        console.log("THIS IS THE MOMENT... (ended)")
+      }
 
       return NextResponse.json({ success: true, data: { handle, fromHandle } })
     }

@@ -3,6 +3,7 @@ import { postToDiscord } from "./discord"
 import { askGPT, askGPTNoJSON } from "./openai"
 import { askDeepSeek } from "./deepseek"
 import { LensSavedProfile, ProfileFetchedFromGraphQL } from "./types"
+import { cleanHandle } from "./strings"
 
 export const getRandomProduct = async () => {
   const systemPrompt = `
@@ -112,6 +113,96 @@ content: ${publication.metadata.content}
   //   messages,
   //   useCase: "generateProductsAndServices",
   // })
+
+  return response
+}
+
+export const generateProductsAndServicesTargetedToProfile = async ({
+  publications,
+  creatorProfile,
+  targetProfile,
+}: {
+  publications: any[]
+  creatorProfile: LensSavedProfile
+  targetProfile: LensSavedProfile
+}) => {
+  const systemPrompt = `You are an expert at generating products and services from a list of publications from a profile.
+  
+The goal is to find the best talents from the creator profile (${creatorProfile.handle}) that can help the target profile (${targetProfile.handle}).
+
+
+Make the best out of this encounter of 2 profiles!
+Find and list ways ${creatorProfile.handle} can serve and help ${targetProfile.handle} based on what they say in their publications.`
+
+  const userPrompt = `
+
+<TargetProfileContext>
+  Context on ${targetProfile.handle}:
+  ${JSON.stringify(targetProfile)}
+</TargetProfileContext>
+
+
+Publications from ${creatorProfile.handle}:
+
+  ${publications
+    .map(
+      (publication) => `
+
+<PUBLICATION>
+pubication_id: ${publication.id}: 
+content: ${publication.metadata.content}
+</PUBLICATION>
+
+`
+    )
+    .join("\n")}
+
+    ---- Reply in JSON format, with the following fields:
+    {
+      "products_and_services": [
+        {
+          "product_name": "...",
+          "product_description": "...", // here, describe how this skill from ${cleanHandle(
+            creatorProfile.handle
+          )} will help ${cleanHandle(targetProfile.handle)}!!
+          "product_price": ... // number (in US DOLLARS!). Could go from 5 to 100000
+          "payment_type": "...", // can be "one-time" or "recurring (monthly)"
+          "product_deadline": from 1 to 100 // in days, measuring how long the creator would need to deliver the product or service, measured in days
+          "inspired_by_publication_ids": ["..."] // the publication id(s) that inspired this product or service
+        }, 
+        ...
+      ]
+    }
+  `
+
+  const messages = [
+    {
+      role: "system",
+      content: systemPrompt,
+    },
+    {
+      role: "user",
+      content: userPrompt,
+    },
+  ]
+
+  // const response = await askGroq({
+  //   messages,
+  // })
+
+  // const response = await askDeepSeek({
+  //   messages,
+  // })
+
+  // const response = await askSonnet({
+  //   messages,
+  //   useCase: "generateProductsAndServices",
+  // })
+
+  const response = await askGPT({
+    messages,
+    useCase: "generateProductsAndServicesTargetedToProfile",
+  })
 
   return response
 }
@@ -229,6 +320,7 @@ THANK YOU!
 
   return response
 }
+
 export const mergeTopProductsAndServices = async ({
   productsAndServices,
   profile,
@@ -250,9 +342,9 @@ ${
     # Facts about the user: ${JSON.stringify(profile.facts)}
 
 
-<CompiledFacts>
+<CompiledProductsAndServices>
 ${JSON.stringify(productsAndServices)}
-</CompiledFacts>
+</CompiledProductsAndServices>
 
 
 Return a single list of products and services about the user, in JSON format, in the same language as the initial products and services.
@@ -289,6 +381,91 @@ THANK YOU!
   const response = await askGPT({
     messages,
     useCase: "mergeProductsAndServicesForIndividualProfile",
+  })
+
+  return response
+}
+
+export const mergeTopProductsAndServicesTargetedToProfile = async ({
+  productsAndServices,
+  creatorProfile,
+  targetProfile,
+}: {
+  productsAndServices: any[]
+  creatorProfile: LensSavedProfile
+  targetProfile: LensSavedProfile
+}) => {
+  const systemPrompt = `You are an expert at merging a list of products and services into a single list of products and services.
+You will be given a list of products and services from a profile (${cleanHandle(
+    creatorProfile.handle
+  )}) and a profile (${cleanHandle(targetProfile.handle)}).
+You have to merge the products and services into a single list of products and services.
+Pick the best ones and sort them by relevance (most relevant first).`
+
+  const userPrompt = `
+
+  <ContextOnTheCreatorOfServices>
+# User Name: ${creatorProfile.display_name}
+# User Handle: ${creatorProfile.handle.replace("lens/", "")}
+${
+  creatorProfile.bio && creatorProfile.bio.length > 0
+    ? "# User Description: " + creatorProfile.bio
+    : ""
+}
+    # Facts about the user: ${JSON.stringify(creatorProfile.facts)}
+</ContextOnTheCreatorOfServices>
+
+<ContextOnTheTargetProfile>
+# User Name: ${targetProfile.display_name}
+# User Handle: ${targetProfile.handle.replace("lens/", "")}
+${
+  targetProfile.bio && targetProfile.bio.length > 0
+    ? "# User Description: " + targetProfile.bio
+    : ""
+}
+    # Facts about the user: ${JSON.stringify(targetProfile.facts)}
+</ContextOnTheTargetProfile>
+
+
+<CompiledProductsAndServices>
+${JSON.stringify(productsAndServices)}
+</CompiledProductsAndServices>
+
+
+Return a single list of products and services about the user, in JSON format, in the same language as the initial products and services.
+
+The format for the JSON must be:
+{
+  "products_and_services": [
+    {
+      "product_name": "...",
+      "product_description": "...",
+      "product_price": ..., // number
+      "payment_type": "...", // can be "one-time" or "recurring (monthly)"
+      "product_deadline": from 1 to 100 // in days
+      "inspired_by_publication_ids": ["..."] // the publication id(s)
+    }, 
+    ...
+  ]
+}
+
+THANK YOU!
+  `
+
+  const messages = [
+    {
+      role: "system",
+      content: systemPrompt,
+    },
+    {
+      role: "user",
+      content: userPrompt,
+    },
+  ]
+
+  const response = await askGPT({
+    messages,
+    useCase: "mergeTopProductsAndServicesTargetedToProfile",
   })
 
   return response

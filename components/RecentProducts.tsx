@@ -33,8 +33,6 @@ const RecentProducts = () => {
       fetchProducts()
     }
   }, [])
-  console.log("recentProducts")
-  console.log(recentProducts)
 
   if (isLoading)
     return (

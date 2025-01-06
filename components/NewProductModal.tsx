@@ -103,7 +103,7 @@ const NewProductModal = ({
   return (
     <Dialog open={modalOn} onOpenChange={onCloseEvent}>
       <DialogContent
-        className={`selection:bg-black/60 selection:text-rfGreen ${
+        className={`selection:bg-black/60 max-w-4xl selection:text-rfGreen ${
           isCreating ? "[&>button]:hidden" : ""
         }`}
       >
@@ -157,7 +157,7 @@ const NewProductModal = ({
                       </div>
                     </Label>
                     <Input
-                      className="!text-xl font-bold"
+                      className="!text-xl lg:!text-2xl font-bold"
                       value={title}
                       onChange={(e) => setTitle(e.target.value)}
                     />
@@ -171,11 +171,11 @@ const NewProductModal = ({
                     <Textarea
                       value={description}
                       rows={5}
-                      className="!text-base font-semibold"
+                      className="!text-base lg:!text-xl font-semibold"
                       onChange={(e) => setDescription(e.target.value)}
                     />
                   </div>
-                  <div className="flex justify-between">
+                  <div className="flex justify-between max-w-xl gap-6 w-full mx-auto">
                     <div className="flex flex-col gap-1">
                       <Label>
                         <div className="opacity-70">
@@ -218,13 +218,15 @@ const NewProductModal = ({
                     </div>
                   </div>
 
-                  <Button
-                    onClick={saveClicked}
-                    className="rounded-full"
-                    size="xl"
-                  >
-                    Create this product!
-                  </Button>
+                  <div className="max-w-xl mx-auto w-full flex flex-col pt-6">
+                    <Button
+                      onClick={saveClicked}
+                      className="rounded-full"
+                      size="xl"
+                    >
+                      Create this product!
+                    </Button>
+                  </div>
                 </>
               )}
             </>

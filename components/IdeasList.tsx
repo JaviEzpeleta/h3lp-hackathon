@@ -10,6 +10,7 @@ import BigTitle from "./BigTitle"
 import NewProductModal from "./NewProductModal"
 import { useState } from "react"
 import ToolTipped from "./ToolTipped"
+import MiniTitle from "./MiniTitle"
 
 const IdeasList = ({
   ideas,
@@ -26,7 +27,7 @@ const IdeasList = ({
   }
 
   return (
-    <div className="flex flex-col w-full max-w-2xl mx-auto py-28 px-2">
+    <div className="flex flex-col w-full max-w-2xl mx-auto px-2">
       <NewProductModal
         idea={selectedIdea}
         fromProfile={fromProfile}
@@ -46,30 +47,81 @@ const IdeasList = ({
             </div>
           </ToolTipped>
         </BigTitle>
-        <Title>
-          <div className="inline-flex items-center gap-2 pt-1">
-            <div>for</div>
-            <div className="flex items-center gap-1">
-              <Link
-                href={`https://hey.xyz/u/${cleanHandle(toProfile.handle)}`}
-                target="_blank"
-                className="active:opacity-50 hover:scale-105 transition-all active:scale-95 translate-y-1"
-              >
-                <span
-                  className="w-9 rounded-lg h-9 inline-block border-[1.5px] border-black"
-                  style={{
-                    backgroundImage: `url(${toProfile.profile_picture})`,
-                    backgroundSize: "cover",
-                    backgroundPosition: "center",
-                  }}
-                />
-              </Link>
-              <div>{cleanHandle(toProfile.handle)}</div>
+        {toProfile.handle === fromProfile.handle ? (
+          <MiniTitle>
+            <div className="inline-flex items-center gap-2 pt-1">
+              <div>by</div>
+              <div className="flex items-center gap-1">
+                <Link
+                  href={`https://hey.xyz/u/${cleanHandle(toProfile.handle)}`}
+                  target="_blank"
+                  className="active:opacity-50 hover:scale-105 transition-all active:scale-95 translate-y-1"
+                >
+                  <span
+                    className="w-9 rounded-lg h-9 inline-block border-[1.5px] border-black"
+                    style={{
+                      backgroundImage: `url(${toProfile.profile_picture})`,
+                      backgroundSize: "cover",
+                      backgroundPosition: "center",
+                    }}
+                  />
+                </Link>
+                <div>{cleanHandle(toProfile.handle)}</div>
+              </div>
             </div>
-          </div>
-        </Title>
+          </MiniTitle>
+        ) : (
+          <>
+            <MiniTitle>
+              <div className="inline-flex items-center gap-2 pt-1">
+                <div>by</div>
+                <div className="flex items-center gap-1">
+                  <Link
+                    href={`https://hey.xyz/u/${cleanHandle(toProfile.handle)}`}
+                    target="_blank"
+                    className="active:opacity-50 hover:scale-105 transition-all active:scale-95 translate-y-1"
+                  >
+                    <span
+                      className="w-9 rounded-lg h-9 inline-block border-[1.5px] border-black"
+                      style={{
+                        backgroundImage: `url(${toProfile.profile_picture})`,
+                        backgroundSize: "cover",
+                        backgroundPosition: "center",
+                      }}
+                    />
+                  </Link>
+                  <div>{cleanHandle(toProfile.handle)}</div>
+                </div>
+              </div>
+            </MiniTitle>
+            <MiniTitle>
+              <div className="inline-flex items-center gap-2 pt-1">
+                <div>customized for</div>
+                <div className="flex items-center gap-1">
+                  <Link
+                    href={`https://hey.xyz/u/${cleanHandle(
+                      fromProfile.handle
+                    )}`}
+                    target="_blank"
+                    className="active:opacity-50 hover:scale-105 transition-all active:scale-95 translate-y-1"
+                  >
+                    <span
+                      className="w-9 rounded-lg h-9 inline-block border-[1.5px] border-black"
+                      style={{
+                        backgroundImage: `url(${fromProfile.profile_picture})`,
+                        backgroundSize: "cover",
+                        backgroundPosition: "center",
+                      }}
+                    />
+                  </Link>
+                  <div>{cleanHandle(fromProfile.handle)}</div>
+                </div>
+              </div>
+            </MiniTitle>
+          </>
+        )}
       </div>
-      <div className="space-y-4 py-4">
+      <div className="space-y-4 py-4 pb-20">
         {ideas.map((idea: GeneratedIdea, index: number) => (
           <div
             key={index}
