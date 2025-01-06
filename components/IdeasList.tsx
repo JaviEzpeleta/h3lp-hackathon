@@ -1,4 +1,4 @@
-import { GeneratedIdea } from "@/lib/types"
+import { GeneratedIdea, LensSavedProfile } from "@/lib/types"
 import Title from "./Title"
 import SubTitle from "./SubTitle"
 import AnimatedStar from "./AnimatedStar"
@@ -14,12 +14,12 @@ import MiniTitle from "./MiniTitle"
 
 const IdeasList = ({
   ideas,
-  fromProfile,
-  toProfile,
+  creatorProfile,
+  targetProfile,
 }: {
   ideas: GeneratedIdea[]
-  fromProfile: any
-  toProfile: any
+  creatorProfile: LensSavedProfile
+  targetProfile: LensSavedProfile
 }) => {
   const [selectedIdea, setSelectedIdea] = useState<GeneratedIdea | null>(null)
   const prefillForm = (idea: GeneratedIdea) => {
@@ -30,8 +30,8 @@ const IdeasList = ({
     <div className="flex flex-col w-full max-w-2xl mx-auto px-2">
       <NewProductModal
         idea={selectedIdea}
-        fromProfile={fromProfile}
-        toProfile={toProfile}
+        creatorProfile={creatorProfile}
+        targetProfile={targetProfile}
         onClose={() => {
           setSelectedIdea(null)
         }}
@@ -47,26 +47,28 @@ const IdeasList = ({
             </div>
           </ToolTipped>
         </BigTitle>
-        {toProfile.handle === fromProfile.handle ? (
+        {targetProfile.handle === creatorProfile.handle ? (
           <MiniTitle>
             <div className="inline-flex items-center gap-2 pt-1">
               <div>by</div>
               <div className="flex items-center gap-1">
                 <Link
-                  href={`https://hey.xyz/u/${cleanHandle(toProfile.handle)}`}
+                  href={`https://hey.xyz/u/${cleanHandle(
+                    creatorProfile.handle
+                  )}`}
                   target="_blank"
                   className="active:opacity-50 hover:scale-105 transition-all active:scale-95 translate-y-1"
                 >
                   <span
                     className="w-9 rounded-lg h-9 inline-block border-[1.5px] border-black"
                     style={{
-                      backgroundImage: `url(${toProfile.profile_picture})`,
+                      backgroundImage: `url(${creatorProfile.profile_picture})`,
                       backgroundSize: "cover",
                       backgroundPosition: "center",
                     }}
                   />
                 </Link>
-                <div>{cleanHandle(toProfile.handle)}</div>
+                <div>{cleanHandle(creatorProfile.handle)}</div>
               </div>
             </div>
           </MiniTitle>
@@ -77,20 +79,22 @@ const IdeasList = ({
                 <div>by</div>
                 <div className="flex items-center gap-1">
                   <Link
-                    href={`https://hey.xyz/u/${cleanHandle(toProfile.handle)}`}
+                    href={`https://hey.xyz/u/${cleanHandle(
+                      creatorProfile.handle
+                    )}`}
                     target="_blank"
                     className="active:opacity-50 hover:scale-105 transition-all active:scale-95 translate-y-1"
                   >
                     <span
                       className="w-9 rounded-lg h-9 inline-block border-[1.5px] border-black"
                       style={{
-                        backgroundImage: `url(${toProfile.profile_picture})`,
+                        backgroundImage: `url(${creatorProfile.profile_picture})`,
                         backgroundSize: "cover",
                         backgroundPosition: "center",
                       }}
                     />
                   </Link>
-                  <div>{cleanHandle(toProfile.handle)}</div>
+                  <div>{cleanHandle(creatorProfile.handle)}</div>
                 </div>
               </div>
             </MiniTitle>
@@ -100,7 +104,7 @@ const IdeasList = ({
                 <div className="flex items-center gap-1">
                   <Link
                     href={`https://hey.xyz/u/${cleanHandle(
-                      fromProfile.handle
+                      targetProfile.handle
                     )}`}
                     target="_blank"
                     className="active:opacity-50 hover:scale-105 transition-all active:scale-95 translate-y-1"
@@ -108,13 +112,13 @@ const IdeasList = ({
                     <span
                       className="w-9 rounded-lg h-9 inline-block border-[1.5px] border-black"
                       style={{
-                        backgroundImage: `url(${fromProfile.profile_picture})`,
+                        backgroundImage: `url(${targetProfile.profile_picture})`,
                         backgroundSize: "cover",
                         backgroundPosition: "center",
                       }}
                     />
                   </Link>
-                  <div>{cleanHandle(fromProfile.handle)}</div>
+                  <div>{cleanHandle(targetProfile.handle)}</div>
                 </div>
               </div>
             </MiniTitle>

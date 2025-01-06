@@ -175,7 +175,10 @@ export const getProfileByHandle = async (
     return false
   }
   if (!data.data.profile) {
-    console.error("🔴 Error in `getProfileIdByHandle() [2]`:", data.errors)
+    console.error(
+      "🔴 Error in `getProfileIdByHandle() [2]`:",
+      data.data.profile
+    )
     await postErrorToDiscord("Error in `getProfileIdByHandle() [2]`")
     return false
   }
@@ -334,16 +337,18 @@ export const getProductsAndServicesByHandleItself = async (handle: string) => {
 }
 
 export const getProductsAndServicesFromProfileToProfile = async (
-  fromProfile: LensSavedProfile,
-  toProfile: LensSavedProfile
+  creatorProfile: LensSavedProfile,
+  targetProfile: LensSavedProfile
 ) => {
   console.log(" 🔥 🔥 🔥 🔥 🔥  findIdeasByFromProfileToProfile()")
-  console.log("fromProfile")
-  console.log(fromProfile)
-  console.log("toProfile")
-  console.log(toProfile)
+  console.log("creatorProfile")
+  console.log(creatorProfile)
+  console.log("targetProfile")
+  console.log(targetProfile)
   // return false
-  const publications = await getMultiplePublicationsByProfileId(toProfile.id)
+  const publications = await getMultiplePublicationsByProfileId(
+    creatorProfile.id
+  )
 
   const BATCHES = 35
 
@@ -357,8 +362,8 @@ export const getProductsAndServicesFromProfileToProfile = async (
     groupedPublications.map(async (block) => {
       const pAndS = await generateProductsAndServicesTargetedToProfile({
         publications: block,
-        creatorProfile: toProfile,
-        targetProfile: fromProfile,
+        creatorProfile,
+        targetProfile,
       })
       return pAndS
     })
@@ -371,8 +376,8 @@ export const getProductsAndServicesFromProfileToProfile = async (
 
   const mergedTopProductsAndServices =
     await mergeTopProductsAndServicesTargetedToProfile({
-      creatorProfile: toProfile,
-      targetProfile: fromProfile,
+      creatorProfile,
+      targetProfile,
       productsAndServices: productsAndServicesFromBlocksOfPublications,
     })
 
@@ -398,10 +403,10 @@ export const getProductsAndServicesFromProfileToProfile = async (
   ).products_and_services
 
   await saveProductsAndServicesToIdeasTable({
-    from: fromProfile.handle,
-    to: toProfile.handle,
+    from: creatorProfile.handle,
+    to: targetProfile.handle,
     productsAndServices,
   })
 
-  return ["pepe"]
+  return [""]
 }

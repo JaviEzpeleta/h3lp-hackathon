@@ -4,8 +4,6 @@ import { NextResponse } from "next/server"
 export async function POST() {
   try {
     const recentProducts = await getRecentProducts()
-    console.log("recentProducts")
-    console.log(recentProducts)
 
     return NextResponse.json({ success: true, data: recentProducts })
   } catch (error) {

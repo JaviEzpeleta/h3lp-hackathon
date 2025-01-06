@@ -15,33 +15,36 @@ import { NextResponse } from "next/server"
 
 export async function POST(request: Request) {
   try {
-    const { handle: handleParam, fromHandle: fromHandleParam } =
+    const { handle: handleParam, targetHandle: targetHandleParam } =
       await request.json()
     let handle = handleParam
-    let fromHandle = fromHandleParam
+    let targetHandle = targetHandleParam
 
-    console.log(" 👀 👀 👀 👀 👀  handle, fromHandle")
-    console.log(handle, fromHandle)
+    console.log(" 👀 👀 👀 👀 👀  handle, targetHandle")
+    console.log(handle, targetHandle)
 
-    if (!handle || !fromHandle) {
-      console.log(" 🔥 🔥 🔥 🔥 🔥  NO handle or fromHandle")
-      await postErrorToDiscord("🔥 🔥 🔥 🔥 🔥  NO handle or fromHandle...")
-      return NextResponse.json({ success: false, data: { handle, fromHandle } })
+    if (!handle || !targetHandle) {
+      console.log(" 🔥 🔥 🔥 🔥 🔥  NO handle or targetHandle")
+      await postErrorToDiscord("🔥 🔥 🔥 🔥 🔥  NO handle or targetHandle...")
+      return NextResponse.json({
+        success: false,
+        data: { handle, targetHandle },
+      })
     }
 
     handle = handle.toLowerCase().trim()
-    fromHandle = fromHandle.toLowerCase().trim()
+    targetHandle = targetHandle.toLowerCase().trim()
 
     if (!handle.startsWith("lens/")) {
       handle = "lens/" + handle
     }
 
-    if (!fromHandle.startsWith("lens/")) {
-      fromHandle = "lens/" + fromHandle
+    if (!targetHandle.startsWith("lens/")) {
+      targetHandle = "lens/" + targetHandle
     }
 
-    if (handle === fromHandle) {
-      console.log(" 🔥 🔥 🔥 🔥 🔥  handle === fromHandle SON IGUALES")
+    if (handle === targetHandle) {
+      console.log(" 🔥 🔥 🔥 🔥 🔥  handle === targetHandle SON IGUALES")
 
       const findSavedIdeas = await findIdeasFromHandleToHandle(handle, handle)
 
@@ -49,13 +52,16 @@ export async function POST(request: Request) {
         console.log(" 🔥 🔥 🔥 🔥 🔥  FOUND SavedIdeas yay!!!", findSavedIdeas)
         return NextResponse.json({
           success: true,
-          data: { handle, fromHandle },
+          data: { handle, targetHandle },
         })
       } else {
         await getProductsAndServicesByHandleItself(handle)
       }
 
-      return NextResponse.json({ success: true, data: { handle, fromHandle } })
+      return NextResponse.json({
+        success: true,
+        data: { handle, targetHandle },
+      })
     } else {
       console.log(" 🔥 🔥 🔥 🔥 🔥  handle !== fromHandle SON DIFERENTES")
 
@@ -106,16 +112,16 @@ export async function POST(request: Request) {
         console.log(" 🔥 🔥 🔥 🔥 🔥  NO profile", handle)
         return NextResponse.json({
           success: false,
-          data: { handle, fromHandle },
+          data: { handle, targetHandle },
         })
       }
 
-      const fromProfile = await getSavedProfileByHandle(fromHandle)
-      if (!fromProfile) {
-        console.log(" 🔥 🔥 🔥 🔥 🔥  NO fromProfile", fromHandle)
+      const targetProfile = await getSavedProfileByHandle(targetHandle)
+      if (!targetProfile) {
+        console.log(" 🔥 🔥 🔥 🔥 🔥  NO targetProfile", targetHandle)
         return NextResponse.json({
           success: false,
-          data: { handle, fromHandle },
+          data: { handle, targetHandle },
         })
       }
 
@@ -124,23 +130,26 @@ export async function POST(request: Request) {
       )
 
       const findSavedIdeas = await findIdeasFromHandleToHandle(
-        fromHandle,
-        handle
+        handle,
+        targetHandle
       )
 
       if (findSavedIdeas && findSavedIdeas.length > 0) {
         console.log(" 🔥 🔥 🔥 🔥 🔥  FOUND SavedIdeas yay!!!", findSavedIdeas)
         return NextResponse.json({
           success: true,
-          data: { handle, fromHandle },
+          data: { handle, targetHandle },
         })
       } else {
         console.log("THIS IS THE MOMENT...")
-        await getProductsAndServicesFromProfileToProfile(fromProfile, profile)
+        await getProductsAndServicesFromProfileToProfile(profile, targetProfile)
         console.log("THIS IS THE MOMENT... (ended)")
       }
 
-      return NextResponse.json({ success: true, data: { handle, fromHandle } })
+      return NextResponse.json({
+        success: true,
+        data: { handle, targetHandle },
+      })
     }
   } catch (error) {
     console.error("🔴 Error in /api/product/get:", error)

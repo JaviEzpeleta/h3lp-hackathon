@@ -23,15 +23,15 @@ const NewProductModal = ({
   onClose,
   onSave,
   modalOn,
-  fromProfile,
-  toProfile,
+  creatorProfile,
+  targetProfile,
 }: {
   idea: GeneratedIdea | null
   onClose: () => void
   onSave: (fullDescription: string) => void
   modalOn: boolean
-  fromProfile: LensSavedProfile
-  toProfile: LensSavedProfile
+  creatorProfile: LensSavedProfile
+  targetProfile: LensSavedProfile
 }) => {
   const [isCreating, setIsCreating] = useState(false)
   const [description, setDescription] = useState("")
@@ -43,7 +43,7 @@ const NewProductModal = ({
 
   const { toast } = useToast()
 
-  const saveClicked = async () => {
+  const submittingTheNewProduct = async () => {
     if (!idea) return
     if (!userSession) return
 
@@ -63,10 +63,10 @@ const NewProductModal = ({
       description: description,
       price: price,
       deadline: idea.product_deadline,
-      created_by: userSession.address,
+      created_by: creatorProfile.address,
       inspired_by_publication_ids: idea.inspired_by_publication_ids,
-      offered_by: fromProfile.handle,
-      targeted_to: toProfile.handle,
+      offered_by: creatorProfile.handle,
+      targeted_to: targetProfile.handle,
     }
 
     console.log(" 📁  product")
@@ -74,16 +74,17 @@ const NewProductModal = ({
     // console.log(" 📁  idea")
     // console.log(idea)
 
-    const response = await axios.post("/api/create-product", product)
-    console.log(" 📁  response")
-    console.log(response)
-    console.log(" 📁  response.data")
-    console.log(response.data)
+    return false
+    // const response = await axios.post("/api/create-product", product)
+    // console.log(" 📁  response")
+    // console.log(response)
+    // console.log(" 📁  response.data")
+    // console.log(response.data)
 
-    const productId = response.data.data
+    // const productId = response.data.data
 
-    setProductCreated(productId)
-    setIsCreating(false)
+    // setProductCreated(productId)
+    // setIsCreating(false)
   }
 
   useEffect(() => {
@@ -113,13 +114,17 @@ const NewProductModal = ({
               <DialogTitle>
                 <BlurryEntranceFaster>
                   <Title>Product Created!!</Title>
+                  <div className="pt-8">
+                    <SubTitle>LFG 🫡</SubTitle>
+                  </div>
                 </BlurryEntranceFaster>
                 <BlurryEntranceFaster delay={0.3}>
-                  <div className="flex items-center gap-2 pt-14">
-                    <Link href={`/products/${productCreated}`}>
-                      <Button>Go to the product page</Button>
+                  <div className="flex flex-col md:flex-row items-center gap-2 pt-14">
+                    <Link href={`/product/${productCreated}`}>
+                      <Button size="xl">Go to the product page</Button>
                     </Link>
                     <Button
+                      size="xl"
                       variant="outline"
                       onClick={() => {
                         setProductCreated(null)
@@ -220,7 +225,7 @@ const NewProductModal = ({
 
                   <div className="max-w-xl mx-auto w-full flex flex-col pt-6">
                     <Button
-                      onClick={saveClicked}
+                      onClick={submittingTheNewProduct}
                       className="rounded-full"
                       size="xl"
                     >

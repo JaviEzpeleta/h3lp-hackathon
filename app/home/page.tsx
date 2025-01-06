@@ -33,12 +33,12 @@ const HomePage = () => {
 
     const res = await axios.post("/api/search/help", {
       handle,
-      fromHandle: userSession.handle,
+      targetHandle: userSession.handle,
     })
     if (res.data.success) {
       const cleanHandle = res.data.data.handle.replace("lens/", "")
-      const cleanFromHandle = res.data.data.fromHandle.replace("lens/", "")
-      router.push(`/ideas/${cleanHandle}/${cleanFromHandle}`)
+      const cleanTargetHandle = res.data.data.targetHandle.replace("lens/", "")
+      router.push(`/ideas/${cleanHandle}/${cleanTargetHandle}`)
     } else {
       toast({
         title: "Oooooops!!! No ideas found...",

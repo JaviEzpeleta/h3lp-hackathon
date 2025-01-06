@@ -6,27 +6,28 @@ import { NextResponse } from "next/server"
 
 export async function POST(request: Request) {
   try {
-    const { from: fromHandle, to: toHandle } = await request.json()
-    let from = fromHandle
-    let to = toHandle
+    const { creator: creatorHandle, target: targetHandle } =
+      await request.json()
+    let creator = creatorHandle
+    let target = targetHandle
 
-    if (!from.startsWith("lens/")) {
-      from = `lens/${from}`
+    if (!creator.startsWith("lens/")) {
+      creator = `lens/${creator}`
     }
-    if (!to.startsWith("lens/")) {
-      to = `lens/${to}`
+    if (!target.startsWith("lens/")) {
+      target = `lens/${target}`
     }
 
-    const ideas = await findIdeasFromHandleToHandle(from, to)
+    const ideas = await findIdeasFromHandleToHandle(creator, target)
     if (!ideas) return NextResponse.json({ success: false, data: [] })
 
-    const fromProfile = await getSavedProfileByHandle(from)
-    const toProfile = await getSavedProfileByHandle(to)
+    const creatorProfile = await getSavedProfileByHandle(creator)
+    const targetProfile = await getSavedProfileByHandle(target)
     return NextResponse.json({
       success: true,
       data: ideas,
-      fromProfile,
-      toProfile,
+      creatorProfile,
+      targetProfile,
     })
   } catch (error) {
     console.error("🔴 Error in /api/ideas/get:", error)

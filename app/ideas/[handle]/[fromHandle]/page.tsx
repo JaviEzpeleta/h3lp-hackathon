@@ -15,8 +15,8 @@ const IdeasPage = () => {
   const loadedRef = useRef(false)
 
   const [ideas, setIdeas] = useState([])
-  const [fromProfile, setFromProfile] = useState(null)
-  const [toProfile, setToProfile] = useState(null)
+  const [creatorProfile, setCreatorProfile] = useState(null)
+  const [targetProfile, setTargetProfile] = useState(null)
   const [isSearching, setIsSearching] = useState(true)
   const [showNoIdeas, setShowNoIdeas] = useState(false)
 
@@ -25,8 +25,8 @@ const IdeasPage = () => {
       console.log("fetching ideas....")
 
       const res = await axios.post("/api/ideas/get", {
-        from: params.fromHandle,
-        to: params.handle,
+        creator: params.fromHandle,
+        target: params.handle,
       })
 
       const data = res.data.data
@@ -41,8 +41,8 @@ const IdeasPage = () => {
 
       const ideas = JSON.parse(data[0].products_and_services)
       setIdeas(ideas)
-      setFromProfile(res.data.fromProfile)
-      setToProfile(res.data.toProfile)
+      setCreatorProfile(res.data.creatorProfile)
+      setTargetProfile(res.data.targetProfile)
       setIsSearching(false)
     }
 
@@ -58,11 +58,11 @@ const IdeasPage = () => {
           <LoadingComponent />
         </div>
       )}
-      {!isSearching && ideas.length > 0 && (
+      {creatorProfile && targetProfile && !isSearching && ideas.length > 0 && (
         <IdeasList
           ideas={ideas}
-          fromProfile={fromProfile}
-          toProfile={toProfile}
+          creatorProfile={creatorProfile}
+          targetProfile={targetProfile}
         />
       )}
       {showNoIdeas && (
