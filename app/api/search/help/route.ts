@@ -46,10 +46,10 @@ export async function POST(request: Request) {
     if (handle === targetHandle) {
       console.log(" 🔥 🔥 🔥 🔥 🔥  handle === targetHandle SON IGUALES")
 
-      const findSavedIdeas = await findIdeasFromHandleToHandle(handle, handle)
+      const savedIdeasFound = await findIdeasFromHandleToHandle(handle, handle)
 
-      if (findSavedIdeas && findSavedIdeas.length > 0) {
-        console.log(" 🔥 🔥 🔥 🔥 🔥  FOUND SavedIdeas yay!!!", findSavedIdeas)
+      if (savedIdeasFound && savedIdeasFound.length > 0) {
+        console.log(" 🔥 🔥 🔥 🔥 🔥  FOUND SavedIdeas yay!!!", savedIdeasFound)
         return NextResponse.json({
           success: true,
           data: { handle, targetHandle },
@@ -129,13 +129,13 @@ export async function POST(request: Request) {
         " 🔥 🔥 🔥 🔥 🔥  OK tengo el profile y el from profile... TIME TO ROCK!!!!!!!"
       )
 
-      const findSavedIdeas = await findIdeasFromHandleToHandle(
+      const savedIdeasFound = await findIdeasFromHandleToHandle(
         handle,
         targetHandle
       )
 
-      if (findSavedIdeas && findSavedIdeas.length > 0) {
-        console.log(" 🔥 🔥 🔥 🔥 🔥  FOUND SavedIdeas yay!!!", findSavedIdeas)
+      if (savedIdeasFound && savedIdeasFound.length > 0) {
+        // console.log(" 🔥 🔥 🔥 🔥 🔥  FOUND SavedIdeas yay!!!", savedIdeasFound)
         return NextResponse.json({
           success: true,
           data: { handle, targetHandle },

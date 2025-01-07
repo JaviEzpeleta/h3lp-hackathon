@@ -1,3 +1,5 @@
+export const maxDuration = 300
+
 import { postErrorToDiscord, postToDiscord } from "@/lib/discord"
 import { fetchLensProfileByAddress, generateProfileFacts } from "@/lib/lens-api"
 import { getLensProfileByAddress, saveLensProfileObject } from "@/lib/postgres"
