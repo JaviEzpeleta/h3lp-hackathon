@@ -111,6 +111,10 @@ const PurchaseRowInProfile = ({
               <div className="text-green-600 text-sm font-semibold text-center bg-green-100 px-2 py-1 rounded-md">
                 ✅ Completed!
               </div>
+            ) : purchase.status === "regretted" ? (
+              <div className="text-red-600 text-sm font-semibold text-center bg-red-100 px-2 py-1 rounded-md">
+                🙅 You asked for a refund
+              </div>
             ) : (
               <div>STATUS NOT HANDLED YET: {purchase.status}</div>
             )}

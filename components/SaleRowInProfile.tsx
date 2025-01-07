@@ -102,11 +102,11 @@ const SaleRowInProfile = ({
               </div>
             ) : sale.status === "accepted" ? (
               <div className="text-green-600 text-sm font-semibold text-center bg-green-100 px-2 py-1 rounded-md">
-                ✅ Money Received!
+                ✅ Money Received in your wallet!
               </div>
             ) : sale.status === "refused" ? (
               <div className="text-red-600 text-sm font-semibold text-center bg-red-100 px-2 py-1 rounded-md">
-                😿 Refused
+                😿 Refused by you
               </div>
             ) : (
               <div>STATUS NOT HANDLED YET: {sale.status}</div>
