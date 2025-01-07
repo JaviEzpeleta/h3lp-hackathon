@@ -10,7 +10,7 @@ interface TrailEmoji {
   stickerURL: string
 }
 
-const MegaIntro = ({ randomNumber }: { randomNumber: number }) => {
+const HeroBanner = ({ randomNumber }: { randomNumber: number }) => {
   const [trail, setTrail] = useState<TrailEmoji[]>([])
   const [lastRender, setLastRender] = useState(0)
   const [isHovering, setIsHovering] = useState(false)
@@ -132,7 +132,7 @@ const MegaIntro = ({ randomNumber }: { randomNumber: number }) => {
 
         {/* <LensDecorations /> */}
 
-        <div className="flex select-none items-center gap-4 text-11xl font-black z-10 text-shadow-like-border2">
+        <div className="flex select-none items-center gap-4 text-9xl font-black z-10 text-shadow-like-border2">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -165,4 +165,4 @@ const MegaIntro = ({ randomNumber }: { randomNumber: number }) => {
   )
 }
 
-export default MegaIntro
+export default HeroBanner

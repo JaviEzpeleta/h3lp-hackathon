@@ -1,6 +1,6 @@
 "use client"
 
-import MegaIntro from "@/components/MegaIntro"
+import HeroBanner from "@/components/HeroBanner"
 import SignInOrNot from "@/components/SignInOrNot"
 import { useEffect } from "react"
 import { useRef } from "react"
@@ -23,8 +23,8 @@ export default function Home() {
         {/* Hero Section */}
         <main className="w-full">
           <div className="text-center mb-8">
-            {/* {randomNumber ? <MegaIntro randomNumber={randomNumber} /> : null} */}
-            <MegaIntro randomNumber={randomNumber} />
+            {/* {randomNumber ? <HeroBanner randomNumber={randomNumber} /> : null} */}
+            <HeroBanner randomNumber={randomNumber} />
           </div>
           <div className="flex justify-center items-center gap-2 pb-12">
             <SignInOrNot />
