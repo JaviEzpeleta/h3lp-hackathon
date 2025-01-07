@@ -5,6 +5,8 @@ personalized products and services to their community.
 
 # [Watch the video demo here!](https://javitoshi.com/videos/h3lp-demo-video.mp4)
 
+[![h3lp.io Demo](https://h3lp.io/h3lp-readme-thumbnail.png)](https://javitoshi.com/videos/h3lp-demo-video.mp4)
+
 ## 🌟 Features
 
 - **AI-Powered Product Generation**: Analyzes Lens profiles to suggest
