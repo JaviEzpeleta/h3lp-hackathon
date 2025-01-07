@@ -51,8 +51,8 @@ product suggestions using state-of-the-art AI models.
 
 ### Dynamic User Interface
 
-Clean, responsive interface with smooth animations and transitions built with
-modern React patterns and TailwindCSS.
+Clean, interface (not mobile-ready yet, sorry!) with smooth animations and
+transitions built with modern React patterns and TailwindCSS.
 
 ### Product Management
 
