@@ -7,7 +7,7 @@ import {
   updatePurchaseStatus,
 } from "@/lib/postgres"
 import { LensSavedProfile, ProfileFetchedFromGraphQL } from "@/lib/types"
-import { callReleaseFunds } from "@/lib/walletActions"
+import { callRefusePurcase, callReleaseFunds } from "@/lib/walletActions"
 import { NextResponse } from "next/server"
 
 export async function POST(request: Request) {
@@ -26,9 +26,9 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Purchase not found" }, { status: 404 })
     }
 
-    const txHash = await callReleaseFunds({
+    const txHash = await callRefusePurcase({
       productId: purchase.product_id,
-      address: purchase.address,
+      buyerAddress: purchase.address,
     })
 
     if (!txHash) {
@@ -44,10 +44,9 @@ export async function POST(request: Request) {
     }
 
     // update the purchase status
-    await updatePurchaseStatus(sale_id, "accepted")
-
+    await updatePurchaseStatus(sale_id, "refused")
     return NextResponse.json(
-      { success: true, message: "Purchase accepted", txHash },
+      { success: true, message: "Purchase refused", txHash },
       { status: 200 }
     )
   } catch (error) {

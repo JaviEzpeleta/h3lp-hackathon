@@ -187,3 +187,32 @@ export const callReleaseFunds = async ({
     return false
   }
 }
+
+export const callRefusePurcase = async ({
+  productId,
+  buyerAddress,
+}: {
+  productId: string
+  buyerAddress: string
+}) => {
+  const privateKey = process.env.RECEIVER_WALLET_PRIVATE_KEY!
+  const provider = new ethers.JsonRpcProvider(RPC_PROVIDER_URL)
+  const wallet = new ethers.Wallet(privateKey, provider)
+
+  const contract = new ethers.Contract(
+    H3LP_CONTRACT_ADDRESS,
+    gumroadAbi,
+    wallet
+  )
+
+  const tx = await contract.rejectPurchase(productId, buyerAddress)
+  const receipt = await tx.wait()
+  console.log(
+    " 🟢 🟢 🟢 🟢 Transaction confirmed in block:",
+    receipt.blockNumber
+  )
+  await postToDiscord(
+    ` 🟢 🟢 🟢 🟢 \`rejectPurchase()\`Transaction sent!!! Hash: ${tx.hash}`
+  )
+  return tx.hash
+}

@@ -10,6 +10,7 @@ import { Button } from "./ui/button"
 import axios from "axios"
 import { useAccount } from "wagmi"
 import useStore from "@/lib/zustandStore"
+import { useToast } from "@/hooks/use-toast"
 
 const SaleRowInProfile = ({
   sale,
@@ -18,6 +19,8 @@ const SaleRowInProfile = ({
   sale: PurchaseInProfile
   index: number
 }) => {
+  const { toast } = useToast()
+
   const { userSession } = useStore()
   const acceptSale = async () => {
     if (!userSession) return
@@ -29,6 +32,11 @@ const SaleRowInProfile = ({
     const data = res.data
     console.log("accept sale response::::")
     console.log(data)
+
+    toast({
+      title: "Purchase accepted",
+      description: data.message,
+    })
   }
 
   const refuseSale = async () => {
@@ -41,6 +49,11 @@ const SaleRowInProfile = ({
     const data = res.data
     console.log("refuse sale response::::")
     console.log(data)
+
+    toast({
+      title: "Purchase refused",
+      description: data.message,
+    })
   }
   return (
     <BlurryEntrance delay={index * 0.08}>
@@ -71,19 +84,29 @@ const SaleRowInProfile = ({
             </div>
           </div>
           <div className="flex flex-col gap-2 items-end justify-end">
-            <div>{timeSince(new Date(sale.created_at).getTime())}</div>
+            <div className="text-xs opacity-70">
+              {timeSince(new Date(sale.created_at).getTime())}
+            </div>
             <div className="font-semibold font-mono text-2xl">
               {sale.amount}
               <span className="text-sm pl-1">GRASS</span>
             </div>
             {sale.status === "pending" ? (
               <div className="flex items-center gap-2">
-                <Button onClick={acceptSale}>Accept</Button>
-                <Button onClick={refuseSale}>Refuse</Button>
+                <Button onClick={acceptSale} variant="outline">
+                  ✅ <b>Accept</b>
+                </Button>
+                <Button onClick={refuseSale} variant="destructive">
+                  <b>Refuse</b>
+                </Button>
               </div>
             ) : sale.status === "accepted" ? (
               <div className="text-green-600 text-sm font-semibold text-center bg-green-100 px-2 py-1 rounded-md">
                 ✅ Money Received!
+              </div>
+            ) : sale.status === "refused" ? (
+              <div className="text-red-600 text-sm font-semibold text-center bg-red-100 px-2 py-1 rounded-md">
+                😿 Refused
               </div>
             ) : (
               <div>STATUS NOT HANDLED YET: {sale.status}</div>
