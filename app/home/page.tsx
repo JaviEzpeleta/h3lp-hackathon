@@ -23,9 +23,22 @@ const HomePage = () => {
     if (!isFetchingSession && !userSession) {
       router.push("/")
     } else if (!isFetchingSession && userSession) {
-      setHandle(userSession?.handle.replace("lens/", "") || "")
+      // setHandle(userSession?.handle.replace("lens/", "") || "")
     }
   }, [userSession, isFetchingSession])
+
+  useEffect(() => {
+    const savedHandle = localStorage.getItem("searchHandle")
+    if (savedHandle) {
+      setHandle(savedHandle)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (handle) {
+      localStorage.setItem("searchHandle", handle)
+    }
+  }, [handle])
 
   const submitForm = async () => {
     if (!userSession) return
@@ -77,6 +90,12 @@ const HomePage = () => {
             >
               <input
                 value={handle}
+                // if user presses enter, submit
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    submitForm()
+                  }
+                }}
                 onChange={(e) => setHandle(e.target.value)}
                 className="!text-3xl !font-bold w-80 h-16 rounded-xl bg-white border-2 focus:border-rfGreen active:border-rfGreen active:bg-rfGreen/15 focus:bg-rfGreen/15 active:outline-none active:ring-0 focus:outline-none focus:ring-0 border-black py-1 px-4"
               />

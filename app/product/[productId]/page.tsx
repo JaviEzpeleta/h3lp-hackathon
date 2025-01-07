@@ -213,7 +213,7 @@ const ProductPage = () => {
 
       {hash && (
         <div>
-          Tx:{" "}
+          Purchase Transaction:{" "}
           <Link
             href={`${BLOCK_EXPLORER_URL}/tx/${hash}`}
             target="_blank"

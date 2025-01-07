@@ -341,10 +341,10 @@ export const getProductsAndServicesFromProfileToProfile = async (
   targetProfile: LensSavedProfile
 ) => {
   console.log(" 🔥 🔥 🔥 🔥 🔥  findIdeasByFromProfileToProfile()")
-  console.log("creatorProfile")
-  console.log(creatorProfile)
-  console.log("targetProfile")
-  console.log(targetProfile)
+  // console.log("creatorProfile")
+  // console.log(creatorProfile)
+  // console.log("targetProfile")
+  // console.log(targetProfile)
   // return false
   const publications = await getMultiplePublicationsByProfileId(
     creatorProfile.id

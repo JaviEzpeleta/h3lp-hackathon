@@ -7,6 +7,9 @@ import { timeSince } from "../lib/time"
 import Link from "next/link"
 import BlurryEntrance from "./BlurryEntrance"
 import { Button } from "./ui/button"
+import axios from "axios"
+import { useAccount } from "wagmi"
+import useStore from "@/lib/zustandStore"
 
 const SaleRowInProfile = ({
   sale,
@@ -15,6 +18,30 @@ const SaleRowInProfile = ({
   sale: PurchaseInProfile
   index: number
 }) => {
+  const { userSession } = useStore()
+  const acceptSale = async () => {
+    if (!userSession) return
+    const res = await axios.post("/api/sale/accept", {
+      sale_id: sale.id,
+      address: userSession.address,
+    })
+
+    const data = res.data
+    console.log("accept sale response::::")
+    console.log(data)
+  }
+
+  const refuseSale = async () => {
+    if (!userSession) return
+    const res = await axios.post("/api/sale/refuse", {
+      sale_id: sale.id,
+      address: userSession.address,
+    })
+
+    const data = res.data
+    console.log("refuse sale response::::")
+    console.log(data)
+  }
   return (
     <BlurryEntrance delay={index * 0.08}>
       <div className="border p-3 rounded-lg shadow-sm shadow-black/10 px-5 bg-white/30">
@@ -48,8 +75,8 @@ const SaleRowInProfile = ({
             <div>{sale.status}</div>
             {sale.status === "pending" ? (
               <div className="flex items-center gap-2">
-                <Button>Accept</Button>
-                <Button>Refuse</Button>
+                <Button onClick={acceptSale}>Accept</Button>
+                <Button onClick={refuseSale}>Refuse</Button>
               </div>
             ) : (
               <div>STATUS NOT HANDLED YET</div>

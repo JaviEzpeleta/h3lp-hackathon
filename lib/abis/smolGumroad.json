@@ -300,6 +300,11 @@
         "internalType": "uint256",
         "name": "_productId",
         "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "_buyer",
+        "type": "address"
       }
     ],
     "name": "confirmReceipt",
@@ -581,6 +586,11 @@
         "internalType": "uint256",
         "name": "_productId",
         "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "_receiver",
+        "type": "address"
       }
     ],
     "name": "releaseFunds",
