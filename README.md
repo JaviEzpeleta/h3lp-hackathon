@@ -1,6 +1,6 @@
 # h3lp.io 🌱 - Helping Help Others Help You
 
-A decentralized marketplace built on Lens Protocol that helps creators offer
+A permissionless marketplace built on Lens Protocol that helps creators offer
 personalized products and services to their community.
 
 # [Watch the video demo here!](https://javitoshi.com/videos/h3lp-demo-video.mp4)
