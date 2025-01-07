@@ -7,22 +7,26 @@ import { Button } from "./ui/button"
 import Link from "next/link"
 import LoadingComponent from "./LoadingComponent"
 import { AnimatePresence, motion } from "framer-motion"
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import axios from "axios"
-import { LensSavedProfile } from "@/lib/types"
 import BlurryEntrance from "./BlurryEntrance"
+import useStore from "@/lib/zustandStore"
+import { useRouter } from "next/navigation"
 
 const SignInOrNot = () => {
   const { address } = useAccount()
-  const [userProfile, setUserProfile] = useState<LensSavedProfile | null>(null)
+  // const [userProfile, setUserProfile] = useState<LensSavedProfile | null>(null)
+  const { userSession, setUserSession } = useStore()
 
+  const router = useRouter()
   useEffect(() => {
     const fetchUserProfileByAddress = async (address: string) => {
       const res = await axios.post("/api/profile/get", {
         address,
       })
       if (res.data.success) {
-        setUserProfile(res.data.data)
+        setUserSession(res.data.data)
+        router.push("/home")
       }
     }
 
@@ -46,7 +50,7 @@ const SignInOrNot = () => {
           </motion.div>
         ) : (
           <>
-            {userProfile ? (
+            {userSession ? (
               <motion.div
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}

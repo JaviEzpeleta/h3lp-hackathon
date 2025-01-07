@@ -50,7 +50,7 @@ export async function POST(request: Request) {
 
       return NextResponse.json({ success: true, data: objetToInsert })
     } else {
-      await postToDiscord(`🐣 Profile already exists: ${profile.handle}`)
+      // await postToDiscord(`🐣 Profile already exists: ${profile.handle}`)
       return NextResponse.json({ success: true, data: profile })
     }
   } catch (error) {

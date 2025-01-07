@@ -2,18 +2,19 @@ import { useAccount } from "wagmi"
 import LoadingIndicator from "./LoadingIndicator"
 import LoggedInUserButton from "./LoggedInUserButton"
 import { ConnectKitButton } from "connectkit"
+import useStore from "@/lib/zustandStore"
 const UserMenu = () => {
-  const { address, isConnecting, isDisconnected } = useAccount()
-
-  if (isConnecting)
+  // const { address, isConnecting, isDisconnected } = useAccount()
+  const { userSession, isFetchingSession } = useStore()
+  if (isFetchingSession)
     return (
       <div className="">
         <LoadingIndicator />
       </div>
     )
-  if (isDisconnected) return <ConnectKitButton />
+  if (!userSession) return <ConnectKitButton />
 
-  if (address) return <LoggedInUserButton />
+  if (userSession) return <LoggedInUserButton />
   else return <ConnectKitButton />
 }
 

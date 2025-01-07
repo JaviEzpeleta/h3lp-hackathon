@@ -8,7 +8,7 @@ export async function POST(request: Request) {
 
     const savedProfile = await getSavedProfileByAddress(address)
     if (!savedProfile) {
-      await postErrorToDiscord("No saved profile found for address: " + address)
+      await postErrorToDiscord("No profile found for address: " + address)
     }
 
     return NextResponse.json({ success: true, data: savedProfile })
