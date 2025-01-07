@@ -144,6 +144,17 @@ const HomePage = () => {
               <BlurryEntrance delay={6}>
                 <SubTitle>This might take one minute.. sorry!!</SubTitle>
               </BlurryEntrance>
+              <BlurryEntrance delay={12}>
+                <div>
+                  AI is processing all publications from {handle} so it&apos;s
+                  not very fast..
+                </div>
+              </BlurryEntrance>
+              <BlurryEntrance delay={40}>
+                <div>
+                  I&apos;m sure you will love it.. thanks for your patience!
+                </div>
+              </BlurryEntrance>
             </div>
           )}
         </AnimatePresence>
