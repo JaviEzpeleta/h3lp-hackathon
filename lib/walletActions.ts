@@ -14,7 +14,7 @@ export const sendTokens = async ({
   amountOfGrass: string
   recipientAddress: string
 }) => {
-  const privateKey = process.env.RECEIVER_WALLET_PRIVATE_KEY!
+  const privateKey = process.env.DEPLOYER_WALLET_PRIVATE_KEY!
   const tokenDecimals = 18
   const amountToSend = ethers.parseUnits(amountOfGrass, tokenDecimals)
 
@@ -87,7 +87,7 @@ export const addProduct = async ({
   creator: string
 }) => {
   try {
-    const privateKey = process.env.RECEIVER_WALLET_PRIVATE_KEY!
+    const privateKey = process.env.DEPLOYER_WALLET_PRIVATE_KEY!
 
     // Initialize provider and wallet
     const provider = new ethers.JsonRpcProvider(RPC_PROVIDER_URL)
@@ -161,7 +161,7 @@ export const callReleaseFunds = async ({
   address: string
 }): Promise<string | false> => {
   try {
-    const privateKey = process.env.RECEIVER_WALLET_PRIVATE_KEY!
+    const privateKey = process.env.DEPLOYER_WALLET_PRIVATE_KEY!
     const provider = new ethers.JsonRpcProvider(RPC_PROVIDER_URL)
     const wallet = new ethers.Wallet(privateKey, provider)
 
@@ -195,7 +195,7 @@ export const callRefusePurcase = async ({
   productId: string
   buyerAddress: string
 }) => {
-  const privateKey = process.env.RECEIVER_WALLET_PRIVATE_KEY!
+  const privateKey = process.env.DEPLOYER_WALLET_PRIVATE_KEY!
   const provider = new ethers.JsonRpcProvider(RPC_PROVIDER_URL)
   const wallet = new ethers.Wallet(privateKey, provider)
 
