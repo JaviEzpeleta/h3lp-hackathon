@@ -73,6 +73,8 @@ The project reads publications and profiles using the Lens Protocol API at:
 
 ## 🌐 Links
 
+- [h3lp.io](https://h3lp.io)
+
 - [Contract Explorer](https://block-explorer.testnet.lens.dev/address/0x72eB025487F1A5DaB9e8657CDBd5335009750314)
 
 ---
