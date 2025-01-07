@@ -10,6 +10,7 @@ import { useEffect, useState } from "react"
 import LoadingComponent from "../../components/LoadingComponent"
 import { AnimatePresence, motion } from "framer-motion"
 import { useToast } from "@/hooks/use-toast"
+import BlurryEntrance from "@/components/BlurryEntrance"
 
 const HomePage = () => {
   const { userSession, isFetchingSession } = useStore()
@@ -43,7 +44,15 @@ const HomePage = () => {
   const submitForm = async () => {
     if (!userSession) return
     setIsSearching(true)
-
+    setTimeout(() => {
+      toast({
+        title: "This can take a while...",
+        description:
+          "The AI is processing the publications from " +
+          handle +
+          " and it might take 1 minute! SORRY!!",
+      })
+    }, 4000)
     try {
       const res = await axios.post("/api/search/help", {
         handle,
@@ -121,16 +130,21 @@ const HomePage = () => {
             </motion.div>
           )}
           {isSearching && (
-            <motion.div
-              initial={{ opacity: 0, y: -50 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 50 }}
-              transition={{ duration: 0.5 }}
-              layout
-              className="px-4 h-20 flex justify-center items-center bg-indigo-200 rounded-xl"
-            >
-              <LoadingComponent text="Generating ideas..." />
-            </motion.div>
+            <div className="flex flex-col gap-4 justify-center items-center">
+              <motion.div
+                initial={{ opacity: 0, y: -50 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 50 }}
+                transition={{ duration: 0.5 }}
+                layout
+                className="px-4 h-20 flex justify-center items-center bg-indigo-200 rounded-xl lg:px-24"
+              >
+                <LoadingComponent text="Generating ideas..." />
+              </motion.div>
+              <BlurryEntrance delay={6}>
+                <SubTitle>This might take one minute.. sorry!!</SubTitle>
+              </BlurryEntrance>
+            </div>
           )}
         </AnimatePresence>
       </div>
