@@ -2,6 +2,8 @@
 
 import HeroBanner from "@/components/HeroBanner"
 import SignInOrNot from "@/components/SignInOrNot"
+import { Button } from "@/components/ui/button"
+import Link from "next/link"
 import { useEffect } from "react"
 import { useRef } from "react"
 import { useState } from "react"
@@ -28,6 +30,17 @@ export default function Home() {
           </div>
           <div className="flex justify-center items-center gap-2 pb-12">
             <SignInOrNot />
+          </div>
+
+          <div className="flex justify-center items-center gap-2 pb-12">
+            <Link
+              href="https://javitoshi.com/videos/h3lp-demo-video.mp4"
+              target="_blank"
+            >
+              <Button variant="outline" size="xl">
+                📼 Watch the demo video
+              </Button>
+            </Link>
           </div>
         </main>
       </div>
