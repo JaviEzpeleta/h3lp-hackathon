@@ -13,7 +13,7 @@ const CoolHeader = () => {
             <Link href="/home" className="flex">
               <Button
                 variant="ghost"
-                className="font-bold text-bbBlack hover:bg-rfGreen/20 hover:text-ttRed transition-all active:opacity-40 text-2xl"
+                className="font-bold text-bbBlack hover:bg-rfGreen/20 backdrop-blur-md hover:text-ttRed transition-all active:opacity-40 text-2xl"
               >
                 h3lp
               </Button>
