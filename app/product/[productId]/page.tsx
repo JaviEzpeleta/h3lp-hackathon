@@ -17,7 +17,7 @@ import {
   useAccount,
 } from "wagmi"
 import { formatUnits, parseEther } from "viem"
-import smolGumroadAbi from "@/lib/abis/smolGumroad.json"
+import h3lpContractAbi from "@/lib/abis/h3lpContractAbi.json"
 import { Loader2 } from "lucide-react"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import BigTitle from "@/components/BigTitle"
@@ -92,7 +92,7 @@ const ProductPage = () => {
 
       writeContract({
         address: H3LP_CONTRACT_ADDRESS,
-        abi: smolGumroadAbi,
+        abi: h3lpContractAbi,
         functionName: "buyProduct",
         args: [BigInt(productId)],
         value: parseEther(product.price.toString()),

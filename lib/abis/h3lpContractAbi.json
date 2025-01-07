@@ -439,7 +439,7 @@
             "type": "uint256"
           }
         ],
-        "internalType": "struct SmolGumroad.Review[]",
+        "internalType": "struct H3lp.Review[]",
         "name": "",
         "type": "tuple[]"
       }
@@ -592,7 +592,7 @@
         "type": "address"
       },
       {
-        "internalType": "enum SmolGumroad.PurchaseStatus",
+        "internalType": "enum H3lp.PurchaseStatus",
         "name": "status",
         "type": "uint8"
       },
@@ -632,7 +632,7 @@
       },
       {
         "internalType": "address",
-        "name": "_receiver",
+        "name": "_buyer",
         "type": "address"
       }
     ],

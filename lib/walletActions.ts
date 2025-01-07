@@ -75,7 +75,7 @@ export const getContractBalance = async () => {
 //   ],
 //   "name": "createProduct",
 
-const gumroadAbi = require("./abis/smolGumroad.json")
+const h3lpContractAbi = require("./abis/h3lpContractAbi.json")
 
 export const addProduct = async ({
   productId,
@@ -96,7 +96,7 @@ export const addProduct = async ({
     // Initialize contract with your specific address
     const contract = new ethers.Contract(
       H3LP_CONTRACT_ADDRESS,
-      gumroadAbi,
+      h3lpContractAbi,
       wallet
     )
 
@@ -137,7 +137,7 @@ export const getProductPriceByProductId = async (productId: number) => {
   const provider = new ethers.JsonRpcProvider(RPC_PROVIDER_URL)
   const contract = new ethers.Contract(
     H3LP_CONTRACT_ADDRESS,
-    gumroadAbi,
+    h3lpContractAbi,
     provider
   )
 
@@ -167,7 +167,7 @@ export const callReleaseFunds = async ({
 
     const contract = new ethers.Contract(
       H3LP_CONTRACT_ADDRESS,
-      gumroadAbi,
+      h3lpContractAbi,
       wallet
     )
 
@@ -201,7 +201,7 @@ export const callRefusePurcase = async ({
 
   const contract = new ethers.Contract(
     H3LP_CONTRACT_ADDRESS,
-    gumroadAbi,
+    h3lpContractAbi,
     wallet
   )
 

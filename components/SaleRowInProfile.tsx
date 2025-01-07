@@ -72,6 +72,9 @@ const SaleRowInProfile = ({
         <div className="border p-3 rounded-lg shadow-sm shadow-black/10 px-5 bg-white/30">
           <div className="flex items-center justify-between">
             <div>
+              <div className="text-xs opacity-70">
+                {timeSince(new Date(sale.created_at).getTime())}
+              </div>
               <Link
                 href={`/product/${sale.product_id}`}
                 className="text-indigo-600 hover:text-indigo-500 active:opacity-50"
@@ -96,9 +99,6 @@ const SaleRowInProfile = ({
               </div>
             </div>
             <div className="flex flex-col gap-2 items-end justify-end">
-              <div className="text-xs opacity-70">
-                {timeSince(new Date(sale.created_at).getTime())}
-              </div>
               <div className="font-semibold font-mono text-2xl">
                 {sale.amount}
                 <span className="text-sm pl-1">GRASS</span>
