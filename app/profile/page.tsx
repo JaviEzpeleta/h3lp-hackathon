@@ -10,7 +10,8 @@ import Title from "@/components/Title"
 import axios from "axios"
 import MiniTitle from "@/components/MiniTitle"
 import LoadingComponent from "@/components/LoadingComponent"
-
+import SaleRowInProfile from "@/components/SaleRowInProfile"
+import { PurchaseInProfile } from "@/lib/types"
 const ProfilePage = () => {
   const router = useRouter()
   const { userSession, isFetchingSession } = useStore()
@@ -37,8 +38,6 @@ const ProfilePage = () => {
       setIsFetching(false)
     }
     if (userSession) {
-      console.log("gonna fech sales and purchases! LFG 🚀")
-
       fetchSalesAndPurchases()
       // setHandle(userSession?.handle.replace("lens/", "") || "")
     }
@@ -80,36 +79,15 @@ const ProfilePage = () => {
       <div className="bg-zinc-100 rounded-2xl p-4 px-6">
         <Title>Sales</Title>
         <div className="flex flex-col gap-2 py-2">
-          {sales.map((sale: Purchase, index) => (
-            <div
-              key={index}
-              className="border p-3 rounded-lg shadow-sm shadow-black/10 px-5"
-            >
-              <MiniTitle>{sale.product_name}</MiniTitle>
-              <div className="flex items-center gap-2">
-                <div
-                  className="w-10 h-10 rounded-full bg-zinc-200 border-2 border-black/40"
-                  style={{
-                    backgroundImage: `url(${sale.creator_profile_picture})`,
-                    backgroundSize: "cover",
-                    backgroundPosition: "center",
-                  }}
-                ></div>
-                <div>
-                  <div className="font-bold">{sale.creator_display_name}</div>
-                  <div className="text-xs">
-                    @{cleanHandle(sale.creator_handle)}
-                  </div>
-                </div>
-              </div>
-            </div>
+          {sales.map((sale: PurchaseInProfile, index) => (
+            <SaleRowInProfile sale={sale} key={index} />
           ))}
         </div>
       </div>
       <div className="bg-zinc-100 rounded-2xl p-4">
         <Title>Purchases</Title>
         <div className="flex flex-col gap-2">
-          {purchases.map((purchase: Purchase, index) => (
+          {purchases.map((purchase: PurchaseInProfile, index) => (
             <div key={index}>
               <MiniTitle>{purchase.product_name}</MiniTitle>
             </div>
@@ -121,18 +99,3 @@ const ProfilePage = () => {
 }
 
 export default ProfilePage
-
-type Purchase = {
-  address: string
-  amount: string
-  created_at: string
-  creator_handle: string
-  id: string
-  product_id: string
-  product_name: string
-  purchase_tx_hash: string
-  status: string
-  updated_at: string
-  creator_display_name: string
-  creator_profile_picture: string
-}

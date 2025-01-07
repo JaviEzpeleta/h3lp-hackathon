@@ -333,10 +333,14 @@ export const getPurchasesByAddress = async (address: string) => {
       p.name AS product_name, 
       h.handle AS creator_handle,
       h.display_name AS creator_display_name,
-      h.profile_picture AS creator_profile_picture
+      h.profile_picture AS creator_profile_picture,
+      buyer.handle AS purchaser_handle,
+      buyer.display_name AS purchaser_display_name,
+      buyer.profile_picture AS purchaser_profile_picture
     FROM h3lp_purchases hp
     JOIN h3lp_products p ON hp.product_id = p.id
     JOIN h3lp_profiles h ON p.created_by = h.address
+    JOIN h3lp_profiles buyer ON hp.address = buyer.address
     WHERE hp.address = $1
     ORDER BY hp.created_at DESC
   `
@@ -351,10 +355,14 @@ export const getSalesByAddress = async (address: string) => {
       p.name AS product_name, 
       h.handle AS creator_handle,
       h.display_name AS creator_display_name,
-      h.profile_picture AS creator_profile_picture
+      h.profile_picture AS creator_profile_picture,
+      buyer.handle AS purchaser_handle,
+      buyer.display_name AS purchaser_display_name,
+      buyer.profile_picture AS purchaser_profile_picture
     FROM h3lp_purchases hp
     JOIN h3lp_products p ON hp.product_id = p.id
     JOIN h3lp_profiles h ON p.created_by = h.address
+    JOIN h3lp_profiles buyer ON hp.address = buyer.address
     WHERE p.created_by = $1
   `
   const res = await executeQuery(theSQL, [address])

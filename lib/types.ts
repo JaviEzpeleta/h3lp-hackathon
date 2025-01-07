@@ -69,3 +69,21 @@ export type ProductInList = {
   updated_at: string
   payment_type: string
 }
+
+export type PurchaseInProfile = {
+  address: string
+  amount: string
+  created_at: string
+  creator_handle: string
+  id: string
+  product_id: string
+  product_name: string
+  purchase_tx_hash: string
+  status: string
+  updated_at: string
+  creator_display_name: string
+  creator_profile_picture: string
+  purchaser_handle: string
+  purchaser_display_name: string
+  purchaser_profile_picture: string
+}
