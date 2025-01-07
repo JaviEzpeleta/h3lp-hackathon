@@ -24,7 +24,7 @@ function BlurryEntrance({
         filter: "blur(10px)",
         // scale: 0.7,
       }}
-      whileInView={{
+      animate={{
         opacity: 1,
         y: 0,
         scale: 1,

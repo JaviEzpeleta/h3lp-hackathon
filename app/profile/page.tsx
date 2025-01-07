@@ -80,7 +80,7 @@ const ProfilePage = () => {
         <Title>Sales</Title>
         <div className="flex flex-col gap-2 py-2">
           {sales.map((sale: PurchaseInProfile, index) => (
-            <SaleRowInProfile sale={sale} key={index} />
+            <SaleRowInProfile sale={sale} key={index} index={index} />
           ))}
         </div>
       </div>
