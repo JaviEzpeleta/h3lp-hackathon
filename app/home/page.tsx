@@ -44,15 +44,6 @@ const HomePage = () => {
   const submitForm = async () => {
     if (!userSession) return
     setIsSearching(true)
-    setTimeout(() => {
-      toast({
-        title: "This can take a while...",
-        description:
-          "The AI is processing the publications from " +
-          handle +
-          " and it might take 1 minute! SORRY!!",
-      })
-    }, 4000)
     try {
       const res = await axios.post("/api/search/help", {
         handle,
