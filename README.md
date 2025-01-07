@@ -41,6 +41,8 @@ npm run dev
 - **Blockchain**: Lens Protocol, Wagmi, Viem
 - **UI Components**: Shadcn/UI
 - **Authentication**: ConnectKit by Family
+- **Web2 Backend**: Vercel API routes, Supabase, PostGresQL (the table
+  declarations are inside the `lib/postgres.ts` file)
 
 ## 🎯 Core Features
 
