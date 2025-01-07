@@ -40,6 +40,9 @@ const RecentProducts = () => {
         <LoadingIndicator />
       </div>
     )
+
+  if (recentProducts.length === 0) return <></>
+
   return (
     <div className="space-y-4">
       <Title>Recent Products</Title>
