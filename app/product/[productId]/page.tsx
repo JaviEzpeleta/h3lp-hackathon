@@ -2,10 +2,7 @@
 
 import LoadingIndicator from "@/components/LoadingIndicator"
 import { Button } from "@/components/ui/button"
-import {
-  BLOCK_EXPLORER_URL,
-  SMOL_GUMROAD_CONTRACT_ADDRESS,
-} from "@/lib/constants"
+import { BLOCK_EXPLORER_URL, H3LP_CONTRACT_ADDRESS } from "@/lib/constants"
 import { ProductInList } from "@/lib/types"
 import axios from "axios"
 import { ExternalLink } from "lucide-react"
@@ -85,7 +82,7 @@ const ProductPage = () => {
       if (!product) return
 
       writeContract({
-        address: SMOL_GUMROAD_CONTRACT_ADDRESS,
+        address: H3LP_CONTRACT_ADDRESS,
         abi: smolGumroadAbi,
         functionName: "buyProduct",
         args: [BigInt(productId)],
@@ -211,6 +208,8 @@ const ProductPage = () => {
         </>
       )}
 
+      {isConfirmed && <PuchaseConfirmationComponent />}
+
       {hash && (
         <div>
           Purchase Transaction:{" "}
@@ -223,8 +222,6 @@ const ProductPage = () => {
           </Link>
         </div>
       )}
-
-      {isConfirmed && <PuchaseConfirmationComponent />}
 
       {error && (
         <Alert variant="destructive">

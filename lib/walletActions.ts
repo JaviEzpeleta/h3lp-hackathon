@@ -3,7 +3,7 @@ import {
   BLOCK_EXPLORER_URL,
   DONATIONS_CONTRACT_ADDRESS,
   RPC_PROVIDER_URL,
-  SMOL_GUMROAD_CONTRACT_ADDRESS,
+  H3LP_CONTRACT_ADDRESS,
 } from "./constants"
 import { postToDiscord } from "./discord"
 
@@ -95,7 +95,7 @@ export const addProduct = async ({
 
     // Initialize contract with your specific address
     const contract = new ethers.Contract(
-      SMOL_GUMROAD_CONTRACT_ADDRESS,
+      H3LP_CONTRACT_ADDRESS,
       gumroadAbi,
       wallet
     )
@@ -136,7 +136,7 @@ export const addProduct = async ({
 export const getProductPriceByProductId = async (productId: number) => {
   const provider = new ethers.JsonRpcProvider(RPC_PROVIDER_URL)
   const contract = new ethers.Contract(
-    SMOL_GUMROAD_CONTRACT_ADDRESS,
+    H3LP_CONTRACT_ADDRESS,
     gumroadAbi,
     provider
   )
@@ -150,5 +150,40 @@ export const getProductPriceByProductId = async (productId: number) => {
       `🔴 Error in getProductPriceByProductId(${productId}): ${error}`
     )
     console.error("Error al obtener el precio del producto:", error)
+  }
+}
+
+export const callReleaseFunds = async ({
+  productId,
+  address,
+}: {
+  productId: string
+  address: string
+}): Promise<string | false> => {
+  try {
+    const privateKey = process.env.RECEIVER_WALLET_PRIVATE_KEY!
+    const provider = new ethers.JsonRpcProvider(RPC_PROVIDER_URL)
+    const wallet = new ethers.Wallet(privateKey, provider)
+
+    const contract = new ethers.Contract(
+      H3LP_CONTRACT_ADDRESS,
+      gumroadAbi,
+      wallet
+    )
+
+    const tx = await contract.releaseFunds(productId, address)
+    const receipt = await tx.wait()
+    console.log(
+      " 🟢 🟢 🟢 🟢 Transaction confirmed in block:",
+      receipt.blockNumber
+    )
+    await postToDiscord(
+      ` 🟢 🟢 🟢 🟢 \`releaseFunds()\`Transaction sent!!! Hash: ${tx.hash}`
+    )
+    return tx.hash
+  } catch (error) {
+    await postToDiscord(`🔴 Error in callReleaseFunds: ${error}`)
+    console.error("🔴 Error in callReleaseFunds:", error)
+    return false
   }
 }

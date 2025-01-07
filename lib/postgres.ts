@@ -368,3 +368,18 @@ export const getSalesByAddress = async (address: string) => {
   const res = await executeQuery(theSQL, [address])
   return res.rows
 }
+
+export const getPurchaseById = async (id: string) => {
+  const res = await executeQuery(`SELECT * FROM h3lp_purchases WHERE id = $1`, [
+    id,
+  ])
+  return res.rows[0]
+}
+
+export const updatePurchaseStatus = async (id: string, status: string) => {
+  const res = await executeQuery(
+    `UPDATE h3lp_purchases SET status = $2 WHERE id = $1`,
+    [id, status]
+  )
+  return res.rows
+}

@@ -11,6 +11,7 @@ import NewProductModal from "./NewProductModal"
 import { useState } from "react"
 import ToolTipped from "./ToolTipped"
 import MiniTitle from "./MiniTitle"
+import BlurryEntrance from "./BlurryEntrance"
 
 const IdeasList = ({
   ideas,
@@ -127,46 +128,48 @@ const IdeasList = ({
       </div>
       <div className="space-y-4 py-4 pb-20">
         {ideas.map((idea: GeneratedIdea, index: number) => (
-          <div
-            key={index}
-            className="p-4 relative rounded-lg border-[3px] border-black flex items-center justify-between gap-4"
-          >
-            <div className="w-14 h-14 border-[3px] border-black rounded-md">
-              <AnimatedStar onClick={() => prefillForm(idea)} />
-            </div>
+          <BlurryEntrance delay={index * 0.12} key={index}>
+            <div
+              key={index}
+              className="p-4 relative rounded-lg border-[3px] border-black flex items-center justify-between gap-4"
+            >
+              <div className="w-14 h-14 border-[3px] border-black rounded-md">
+                <AnimatedStar onClick={() => prefillForm(idea)} />
+              </div>
 
-            <div className="flex-1 pr-16">
-              <SubTitle>{idea.product_name}</SubTitle>
-              <div className="flex items-center gap-2">
-                <PriceTag>
-                  ${idea.product_price}
-                  {idea.payment_type === "recurring (monthly)" && "/month"}
-                </PriceTag>
+              <div className="flex-1 pr-16">
+                <SubTitle>{idea.product_name}</SubTitle>
+                <div className="flex items-center gap-2">
+                  <PriceTag>
+                    ${idea.product_price}
+                    {idea.payment_type === "recurring (monthly)" && "/month"}
+                  </PriceTag>
+                </div>
               </div>
-            </div>
-            <div className="h-full absolute right-0 w-[80px] flex justify-end p-1 pt-4 pr-2">
-              <div className="flex flex-wrap items-start justify-end gap-0">
-                {idea.inspired_by_publication_ids.map((id, index) => (
-                  <div key={index}>
-                    <Link
-                      href={`https://hey.xyz/posts/${id}`}
-                      target="_blank"
-                      className="border border-transparent rounded-md hover:border-black/20 hover:scale-[112%] 
+              <div className="h-full absolute right-0 w-[80px] flex justify-end p-1 pt-4 pr-2">
+                <div className="flex flex-wrap items-start justify-end gap-0">
+                  {idea.inspired_by_publication_ids.map((id, index) => (
+                    <div key={index}>
+                      <Link
+                        href={`https://hey.xyz/posts/${id}`}
+                        target="_blank"
+                        className="border border-transparent rounded-md hover:border-black/20 hover:scale-[112%] 
                             transition-all active:scale-95 active:opacity-50 group inline-block"
-                    >
-                      <div
-                        className="rounded-md opacity-75 group-hover:opacity-100 p-1 group-active:rotate-[360deg]
-                       bg-transparent group-hover:bg-white/50 group-hover:rotate-[180deg] transition-all"
                       >
-                        <img src="/img/hey-icon.png" className="w-5" />
-                      </div>
-                    </Link>
-                  </div>
-                ))}
+                        <div
+                          className="rounded-md opacity-75 group-hover:opacity-100 p-1 group-active:rotate-[360deg]
+                       bg-transparent group-hover:bg-white/50 group-hover:rotate-[180deg] transition-all"
+                        >
+                          <img src="/img/hey-icon.png" className="w-5" />
+                        </div>
+                      </Link>
+                    </div>
+                  ))}
+                </div>
               </div>
+              {/* <div>{idea.product_description}</div> */}
             </div>
-            {/* <div>{idea.product_description}</div> */}
-          </div>
+          </BlurryEntrance>
         ))}
       </div>
     </div>

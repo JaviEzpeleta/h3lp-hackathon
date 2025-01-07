@@ -74,8 +74,8 @@ export const DONATIONS_CONTRACT_ADDRESS =
 export const RPC_PROVIDER_URL = "https://rpc.testnet.lens.dev"
 export const BLOCK_EXPLORER_URL = "https://block-explorer.testnet.lens.dev"
 
-export const SMOL_GUMROAD_CONTRACT_ADDRESS =
-  "0xa1a94eEe188338E05471788F668B566b6A31FdfF"
+export const H3LP_CONTRACT_ADDRESS =
+  "0x72eB025487F1A5DaB9e8657CDBd5335009750314"
 
 export const PROFILE_PAGES_TO_PARSE = 12
 

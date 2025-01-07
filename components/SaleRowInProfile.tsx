@@ -70,16 +70,23 @@ const SaleRowInProfile = ({
               </div>
             </div>
           </div>
-          <div>
+          <div className="flex flex-col gap-2 items-end justify-end">
             <div>{timeSince(new Date(sale.created_at).getTime())}</div>
-            <div>{sale.status}</div>
+            <div className="font-semibold font-mono text-2xl">
+              {sale.amount}
+              <span className="text-sm pl-1">GRASS</span>
+            </div>
             {sale.status === "pending" ? (
               <div className="flex items-center gap-2">
                 <Button onClick={acceptSale}>Accept</Button>
                 <Button onClick={refuseSale}>Refuse</Button>
               </div>
+            ) : sale.status === "accepted" ? (
+              <div className="text-green-600 text-sm font-semibold text-center bg-green-100 px-2 py-1 rounded-md">
+                ✅ Money Received!
+              </div>
             ) : (
-              <div>STATUS NOT HANDLED YET</div>
+              <div>STATUS NOT HANDLED YET: {sale.status}</div>
             )}
           </div>
         </div>
