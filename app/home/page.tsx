@@ -44,18 +44,29 @@ const HomePage = () => {
     if (!userSession) return
     setIsSearching(true)
 
-    const res = await axios.post("/api/search/help", {
-      handle,
-      targetHandle: userSession.handle,
-    })
-    if (res.data.success) {
-      const cleanHandle = res.data.data.handle.replace("lens/", "")
-      const cleanTargetHandle = res.data.data.targetHandle.replace("lens/", "")
-      router.push(`/ideas/${cleanHandle}/${cleanTargetHandle}`)
-    } else {
+    try {
+      const res = await axios.post("/api/search/help", {
+        handle,
+        targetHandle: userSession.handle,
+      })
+      if (res.data.success) {
+        const cleanHandle = res.data.data.handle.replace("lens/", "")
+        const cleanTargetHandle = res.data.data.targetHandle.replace(
+          "lens/",
+          ""
+        )
+        router.push(`/ideas/${cleanHandle}/${cleanTargetHandle}`)
+      } else {
+        toast({
+          title: "Oooooops!!! No ideas found...",
+          description: "Try again with a different handle, sorry!",
+        })
+      }
+    } catch (error) {
       toast({
-        title: "Oooooops!!! No ideas found...",
+        title: "Oooooops!!! No profile found...",
         description: "Try again with a different handle, sorry!",
+        variant: "destructive",
       })
     }
 
@@ -118,7 +129,7 @@ const HomePage = () => {
               layout
               className="px-4 h-20 flex justify-center items-center bg-indigo-200 rounded-xl"
             >
-              <LoadingComponent />
+              <LoadingComponent text="Generating ideas..." />
             </motion.div>
           )}
         </AnimatePresence>

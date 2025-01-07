@@ -1,20 +1,11 @@
-import { postErrorToDiscord, postToDiscord } from "@/lib/discord"
-import { fetchLensProfileByAddress, generateProfileFacts } from "@/lib/lens-api"
-import {
-  getLensProfileByAddress,
-  getPurchaseById,
-  saveLensProfileObject,
-  updatePurchaseStatus,
-} from "@/lib/postgres"
-import { LensSavedProfile, ProfileFetchedFromGraphQL } from "@/lib/types"
+import { postErrorToDiscord } from "@/lib/discord"
+import { getPurchaseById, updatePurchaseStatus } from "@/lib/postgres"
 import { callReleaseFunds } from "@/lib/walletActions"
 import { NextResponse } from "next/server"
 
 export async function POST(request: Request) {
   try {
     const { sale_id, address } = await request.json()
-
-    // TODO: verify the sale was made to this address
 
     const purchase = await getPurchaseById(sale_id)
 
@@ -51,7 +42,7 @@ export async function POST(request: Request) {
       { status: 200 }
     )
   } catch (error) {
-    console.error("🔴 Error in /api/product/get:", error)
+    console.error("🔴 Error in /api/sale/accept:", error)
     return NextResponse.json(
       { error: "Failed to fetch product" },
       { status: 500 }

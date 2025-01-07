@@ -8,9 +8,9 @@ import { cleanHandle } from "../../lib/strings"
 import BigTitle from "@/components/BigTitle"
 import Title from "@/components/Title"
 import axios from "axios"
-import MiniTitle from "@/components/MiniTitle"
 import LoadingComponent from "@/components/LoadingComponent"
 import SaleRowInProfile from "@/components/SaleRowInProfile"
+import PurchaseRowInProfile from "@/components/PurchaseRowInProfile"
 import { PurchaseInProfile } from "@/lib/types"
 const ProfilePage = () => {
   const router = useRouter()
@@ -76,24 +76,31 @@ const ProfilePage = () => {
           </Title>
         </div>
       </div>
-      <div className="bg-zinc-100 rounded-2xl p-4 px-6">
-        <Title>Sales</Title>
-        <div className="flex flex-col gap-2 py-2">
-          {sales.map((sale: PurchaseInProfile, index) => (
-            <SaleRowInProfile sale={sale} key={index} index={index} />
-          ))}
+      {sales.length > 0 && (
+        <div className="bg-zinc-100 rounded-2xl p-4 px-6 space-y-4">
+          <Title>Sales</Title>
+          <div className="flex flex-col gap-2 py-2">
+            {sales.map((sale: PurchaseInProfile, index) => (
+              <SaleRowInProfile sale={sale} key={index} index={index} />
+            ))}
+          </div>
         </div>
-      </div>
-      <div className="bg-zinc-100 rounded-2xl p-4">
-        <Title>Purchases</Title>
-        <div className="flex flex-col gap-2">
-          {purchases.map((purchase: PurchaseInProfile, index) => (
-            <div key={index}>
-              <MiniTitle>{purchase.product_name}</MiniTitle>
-            </div>
-          ))}
+      )}
+
+      {purchases.length > 0 && (
+        <div className="bg-zinc-100 rounded-2xl p-4 space-y-4">
+          <Title>Things you paid for</Title>
+          <div className="flex flex-col gap-2">
+            {purchases.map((purchase: PurchaseInProfile, index) => (
+              <PurchaseRowInProfile
+                purchase={purchase}
+                key={index}
+                index={index}
+              />
+            ))}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   )
 }

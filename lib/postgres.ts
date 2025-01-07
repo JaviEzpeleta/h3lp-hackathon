@@ -364,6 +364,7 @@ export const getSalesByAddress = async (address: string) => {
     JOIN h3lp_profiles h ON p.created_by = h.address
     JOIN h3lp_profiles buyer ON hp.address = buyer.address
     WHERE p.created_by = $1
+    ORDER BY hp.created_at DESC
   `
   const res = await executeQuery(theSQL, [address])
   return res.rows
