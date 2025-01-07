@@ -30,6 +30,8 @@ import PuchaseConfirmationComponent from "@/components/PuchaseConfirmationCompon
 const ProductPage = () => {
   const { productId } = useParams() as { productId: string }
   const [loading, setLoading] = useState(true)
+
+  const [hasPurchased, setHasPurchased] = useState(false)
   //   const product = (await getProductById(productId)) as Product
 
   const [product, setProduct] = useState<ProductInList | null>(null)
@@ -45,13 +47,20 @@ const ProductPage = () => {
       setLoading(true)
       const res = await axios.post("/api/products/get", { productId })
       setProduct(res.data.data)
+
+      const resHasPurchased = await axios.post("/api/products/hasPurchased", {
+        productId,
+        address,
+      })
+      setHasPurchased(resHasPurchased.data.data)
       setLoading(false)
     }
+    if (!address) return
     if (!loadedRef.current) {
       fetchProduct()
       loadedRef.current = true
     }
-  }, [productId])
+  }, [productId, address])
 
   const [error, setError] = useState<string>("")
 
@@ -173,38 +182,54 @@ const ProductPage = () => {
             </Link>
           </div>
 
-          <div className="flex justify-center">
-            <div className="p-6 bg-zinc-100 rounded-lg flex flex-col items-center justify-center gap-2">
-              <div className="flex">
-                <MiniTitle>
-                  You have: {/* <div className="p-2 bg-zinc-900 rounded-md"> */}
-                  {balance
-                    ? Number(formatUnits(balance.value, 18)).toFixed(2)
-                    : 0}{" "}
-                  $GRASS
-                  {/* </div> */}
-                </MiniTitle>
-              </div>
-              <div>
-                <Button
-                  size="xl"
-                  onClick={launchBuy}
-                  disabled={isPending || isConfirming}
-                >
-                  {isPending || isConfirming ? (
-                    <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      {isPending
-                        ? "In progress..."
-                        : "Waiting for confirmation..."}
-                    </>
-                  ) : (
-                    `Buy for ${product?.price} $GRASS`
-                  )}
-                </Button>
+          {hasPurchased ? (
+            <div className="flex justify-center">
+              <div className="p-6 md:p-10 bg-emerald-100 rounded-lg flex flex-col items-center justify-center gap-6">
+                <div className="text-2xl font-bold">
+                  You already purchased this!
+                </div>
+                <Link href={`/profile`}>
+                  <Button size="lg" variant="outline">
+                    <b>Find it in your profile</b>
+                  </Button>
+                </Link>
               </div>
             </div>
-          </div>
+          ) : (
+            <div className="flex justify-center">
+              <div className="p-6 bg-zinc-100 rounded-lg flex flex-col items-center justify-center gap-2">
+                <div className="flex">
+                  <MiniTitle>
+                    You have:{" "}
+                    {/* <div className="p-2 bg-zinc-900 rounded-md"> */}
+                    {balance
+                      ? Number(formatUnits(balance.value, 18)).toFixed(2)
+                      : 0}{" "}
+                    $GRASS
+                    {/* </div> */}
+                  </MiniTitle>
+                </div>
+                <div>
+                  <Button
+                    size="xl"
+                    onClick={launchBuy}
+                    disabled={isPending || isConfirming}
+                  >
+                    {isPending || isConfirming ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        {isPending
+                          ? "In progress..."
+                          : "Waiting for confirmation..."}
+                      </>
+                    ) : (
+                      `Buy for ${product?.price} $GRASS`
+                    )}
+                  </Button>
+                </div>
+              </div>
+            </div>
+          )}
         </>
       )}
 

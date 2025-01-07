@@ -384,3 +384,17 @@ export const updatePurchaseStatus = async (id: string, status: string) => {
   )
   return res.rows
 }
+
+export const checkIfUserHasPurchasedProduct = async (
+  productId: string,
+  address: string
+) => {
+  const res = await executeQuery(
+    `SELECT * FROM h3lp_purchases WHERE product_id = $1 AND address = $2`,
+    [productId, address]
+  )
+  console.log(" 💛 💛 💛 💛 productId", productId)
+  console.log(" 💛 💛 💛 💛 address", address)
+  // console.log(" 💛 💛 💛 💛 res", res)
+  return res.rows.length > 0
+}

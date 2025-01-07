@@ -10,6 +10,15 @@ import { Button } from "./ui/button"
 import axios from "axios"
 import useStore from "@/lib/zustandStore"
 import { useToast } from "@/hooks/use-toast"
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogTitle,
+} from "./ui/alert-dialog"
+import { Loader2 } from "lucide-react"
+import { useState } from "react"
+import Title from "./Title"
 
 const PurchaseRowInProfile = ({
   purchase,
@@ -21,39 +30,44 @@ const PurchaseRowInProfile = ({
   const { toast } = useToast()
 
   const { userSession } = useStore()
+  const [isLoading, setIsLoading] = useState(false)
+
   const acceptPurchase = async () => {
     if (!userSession) return
-    const res = await axios.post("/api/purchase/accept", {
-      purchase_id: purchase.id,
-      address: userSession.address,
-    })
-
-    const data = res.data
-    console.log("accept purchase response::::")
-    console.log(data)
-
-    toast({
-      title: "Purchase accepted",
-      description: data.message,
-    })
+    setIsLoading(true)
+    try {
+      const res = await axios.post("/api/purchase/accept", {
+        purchase_id: purchase.id,
+        address: userSession.address,
+      })
+      toast({
+        title: "Purchase accepted",
+        description: res.data.message,
+      })
+    } finally {
+      setIsLoading(false)
+      window.location.reload()
+    }
   }
 
   const refusePurchase = async () => {
     if (!userSession) return
-    const res = await axios.post("/api/purchase/refuse", {
-      purchase_id: purchase.id,
-      address: userSession.address,
-    })
-
-    const data = res.data
-    console.log("refuse purchase response::::")
-    console.log(data)
-
-    toast({
-      title: "Purchase refused",
-      description: data.message,
-    })
+    setIsLoading(true)
+    try {
+      const res = await axios.post("/api/purchase/refuse", {
+        purchase_id: purchase.id,
+        address: userSession.address,
+      })
+      toast({
+        title: "Purchase refused",
+        description: res.data.message,
+      })
+    } finally {
+      setIsLoading(false)
+      window.location.reload()
+    }
   }
+
   return (
     <BlurryEntrance delay={index * 0.08}>
       <div className="border p-3 rounded-lg shadow-sm shadow-black/10 px-5 bg-white/30">
@@ -121,6 +135,19 @@ const PurchaseRowInProfile = ({
           </div>
         </div>
       </div>
+      <AlertDialog open={isLoading}>
+        <AlertDialogContent className="flex flex-col items-center justify-center gap-4">
+          <Loader2 className="h-8 w-8 animate-spin" />
+          <AlertDialogTitle>
+            <Title>Processing...</Title>
+          </AlertDialogTitle>
+          <AlertDialogDescription>
+            <div className="text-lg text-center">
+              Please wait while we process your request
+            </div>
+          </AlertDialogDescription>
+        </AlertDialogContent>
+      </AlertDialog>
     </BlurryEntrance>
   )
 }
