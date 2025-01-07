@@ -22,7 +22,7 @@ personalized products and services to their community.
 1. Install dependencies:
 
 ```bash
-npm install
+npm install --force
 ```
 
 2. Run development server:
