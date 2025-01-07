@@ -1,3 +1,5 @@
+export const maxDuration = 300
+
 import { postErrorToDiscord } from "@/lib/discord"
 import {
   generateProfileFacts,
