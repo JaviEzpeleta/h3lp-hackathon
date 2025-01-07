@@ -10,6 +10,7 @@ import { AnimatePresence, motion } from "framer-motion"
 import { useEffect, useState } from "react"
 import axios from "axios"
 import { LensSavedProfile } from "@/lib/types"
+import BlurryEntrance from "./BlurryEntrance"
 
 const SignInOrNot = () => {
   const { address } = useAccount()
@@ -56,8 +57,17 @@ const SignInOrNot = () => {
                 </Link>
               </motion.div>
             ) : (
-              <div>
+              <div className="flex flex-col justify-center items-center gap-4">
                 <LoadingComponent />
+                <BlurryEntrance delay={6}>
+                  <div>
+                    You don&apos;t have a profile yet so the AI is processing
+                    your publications
+                  </div>
+                </BlurryEntrance>
+                <BlurryEntrance delay={16}>
+                  <div>It might take like 30 seconds.. sorry!</div>
+                </BlurryEntrance>
               </div>
             )}
           </>
